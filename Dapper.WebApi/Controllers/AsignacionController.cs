@@ -75,7 +75,7 @@ namespace Dapper.WebApi.Controllers
                 if (result) return Ok("Registro Eliminado."); else return NotFound();
             }
 
-            return BadRequest("Se ha producido algún erro.")
+            return BadRequest("Se ha producido algún erro.");
 
         }
     }
