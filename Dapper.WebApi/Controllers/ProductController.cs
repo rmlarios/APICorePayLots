@@ -11,6 +11,7 @@ namespace Dapper.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi=true)]
     public class ProductController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
