@@ -66,9 +66,17 @@ namespace Dapper.WebApi.Controllers
 
         // DELETE api/asignacion/5
         [HttpDelete("{id}")]
-        public void DeleteById(int id)
+        public async Task<IActionResult> DeleteById(int id)
         {
-            
+            var obj = await _repository.GetByIdAsync(id);
+            if(obj!=null)
+            {
+                var result = await _repository.DeleteAsync(id);
+                if (result) return Ok("Registro Eliminado."); else return NotFound();
+            }
+
+            return BadRequest("Se ha producido algún erro.")
+
         }
     }
 }
