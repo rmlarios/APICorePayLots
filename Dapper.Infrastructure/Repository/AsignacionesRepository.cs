@@ -29,6 +29,11 @@ namespace Dapper.Infrastructure.Repository
       return result;
     }
 
+    public async Task<ViewAsignacionesSaldo> GetDatosAsignacion(int id)
+    {
+      var result = await _context.ViewAsignacionesSaldo.Where(p=> p.IdAsignacion==id).FirstOrDefaultAsync();
+      return result;
+    }
     public override async Task<int> AddUpdateAsync(Asignaciones asignacion)
     {
       string user = _userAccesor.GetCurrentUser();

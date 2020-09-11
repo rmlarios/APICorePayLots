@@ -1,3 +1,4 @@
+using System.Data;
 using System;
 using System.Collections.Generic;
 
@@ -7,6 +8,11 @@ namespace Dapper.Application.Wrappers
     {
          public Response()
         {
+        }
+        public Response(List<T> datas)
+        {
+            Succeeded = true;
+            Datas = datas;
         }
         public Response(T data,string message = null)
         {
@@ -23,5 +29,6 @@ namespace Dapper.Application.Wrappers
         public string Message { get; set; }
         public List<string> Errors { get; set; }
         public T Data { get; set; }
+        public List<T> Datas {get; set;}
     }
 }

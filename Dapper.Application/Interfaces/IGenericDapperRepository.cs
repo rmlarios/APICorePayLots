@@ -1,5 +1,7 @@
+using System.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,8 +14,9 @@ namespace Dapper.Application.Interfaces
         Task<IReadOnlyList<T>> GetAllAsync();
         Task<int> AddUpdateAsync(T entity);
         Task<bool> DeleteAsync(int id);
-
+        Task<IReadOnlyList<T>> FindAsync(Expression<Func<T, bool>> expression);
         Task<object> ExecuteSP(string sql, object parameters);
+        Task<string> Filter(string condition);
         
     }
 }

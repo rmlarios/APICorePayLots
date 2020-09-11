@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Dapper.Infraestructure.Identity;
 using Dapper.Infrastructure;
@@ -32,7 +33,7 @@ namespace Dapper.WebApi
             services.AddInfrastructure(Configuration);
             services.AddIdentityInfrastructure(Configuration);
             services.AddSwaggerExtension();
-            services.AddControllers().AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllers().AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore).AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             
 
             

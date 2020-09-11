@@ -13,6 +13,8 @@ using Dapper.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Dapper.Core.Model;
+using System.Linq.Expressions;
+using Newtonsoft.Json;
 
 namespace Dapper.Infrastructure.Repository
 {
@@ -69,6 +71,11 @@ namespace Dapper.Infrastructure.Repository
 
       }
     }
+
+    public async Task<IReadOnlyList<T>> FindAsync(Expression<Func<T, bool>> expression)
+    {
+      return await _context.Set<T>().Where(expression).ToListAsync();
+    }
     #region :::::::::UTILIDADES
     /// <summary>
     /// Funcion que permite ejecutar un procedimiento almacenado como Escalar
@@ -109,6 +116,27 @@ namespace Dapper.Infrastructure.Repository
     {
       var error = _context.Set<ErrorSql>().Where(p => p.IdentityUser == IdentityUser).Select(s => new { s.ErrorSql1 });
       return error.ToString();
+    }
+
+    public async Task<string> Filter(string query)
+    {
+      SqlConnection conn = new SqlConnection(_connectionstring);
+
+      using (SqlCommand cmd = new SqlCommand(query, conn))
+      {
+        cmd.CommandType = CommandType.Text;
+        //cmd.Parameters.AddRange(parameters);
+
+        conn.Open();
+        // When using CommandBehavior.CloseConnection, the connection will be closed when the   
+        // IDataReader is closed.  
+        SqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+        var dt = new DataTable();
+        dt.Load(reader);       
+        //return dt;
+        return JsonConvert.SerializeObject(dt);
+
+      }
     }
     #endregion
 
