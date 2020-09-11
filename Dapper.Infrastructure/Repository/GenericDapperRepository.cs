@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System;
 using System.Runtime.Intrinsics.X86;
 using System.Data;
@@ -58,8 +59,14 @@ namespace Dapper.Infrastructure.Repository
 
     public async Task<T> GetByIdAsync(int id)
     {
+      //return await _context.Set<T>().FindAsync(id);
+      var result = await _context.Set<T>().FindAsync(id);
+      if (result == null)
+        throw new ApiException("Registro no encontrado");
+      return result;
 
-      using (var connection = new SqlConnection(_connectionstring))
+
+      /* using (var connection = new SqlConnection(_connectionstring))
       {
         connection.Open();
         var entity = await connection.QuerySingleOrDefaultAsync<T>("SELECT *  FROM " + _tableName + " WHERE " + _idfieldname + "=@ID", new { ID = id });
@@ -69,12 +76,12 @@ namespace Dapper.Infrastructure.Repository
 
         return entity;
 
-      }
+      } */
     }
 
-    public async Task<IReadOnlyList<T>> FindAsync(Expression<Func<T, bool>> expression)
+    public async Task<List<M>> FindAsync<M>(Expression<Func<M, bool>> expression) where M : class
     {
-      return await _context.Set<T>().Where(expression).ToListAsync();
+      return await _context.Set<M>().Where(expression).ToListAsync();
     }
     #region :::::::::UTILIDADES
     /// <summary>
@@ -132,7 +139,7 @@ namespace Dapper.Infrastructure.Repository
         // IDataReader is closed.  
         SqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
         var dt = new DataTable();
-        dt.Load(reader);       
+        dt.Load(reader);
         //return dt;
         return JsonConvert.SerializeObject(dt);
 

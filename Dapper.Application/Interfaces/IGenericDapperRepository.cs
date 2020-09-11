@@ -14,7 +14,8 @@ namespace Dapper.Application.Interfaces
         Task<IReadOnlyList<T>> GetAllAsync();
         Task<int> AddUpdateAsync(T entity);
         Task<bool> DeleteAsync(int id);
-        Task<IReadOnlyList<T>> FindAsync(Expression<Func<T, bool>> expression);
+        //Task<IReadOnlyList<T>> FindAsync(Expression<Func<T, bool>> expression);
+        Task<List<M>> FindAsync<M>(Expression<Func<M, bool>> expression) where M : class;
         Task<object> ExecuteSP(string sql, object parameters);
         Task<string> Filter(string condition);
         

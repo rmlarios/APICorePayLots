@@ -15,25 +15,13 @@ namespace Dapper.Infrastructure.Repository
   public class AsignacionesRepository : GenericDapperRepository<Asignaciones>, IAsignacionesRepository
   {
     private readonly IUserAccesor _userAccesor;
-    private readonly PayLotsDBContext _context;
+    //private readonly PayLotsDBContext _context;
     public AsignacionesRepository(IConfiguration configuration, IUserAccesor userAccesor, PayLotsDBContext context) : base(configuration, "Asignaciones", "IdAsignacion",context)
     {
       _userAccesor = userAccesor;
-      _context = context;
+      //_context = context;
     }
 
-    public async Task<List<ViewAsignacionesLotes>> GetAsignacionesBeneficiario(int id)
-    {
-      //var result = _context.Set<ViewAsignacionesLotes>().Where(p => p.IdBeneficiario == id);
-      var result = await _context.ViewAsignacionesLotes.Where(p => p.IdBeneficiario == id).ToListAsync();
-      return result;
-    }
-
-    public async Task<ViewAsignacionesSaldo> GetDatosAsignacion(int id)
-    {
-      var result = await _context.ViewAsignacionesSaldo.Where(p=> p.IdAsignacion==id).FirstOrDefaultAsync();
-      return result;
-    }
     public override async Task<int> AddUpdateAsync(Asignaciones asignacion)
     {
       string user = _userAccesor.GetCurrentUser();
