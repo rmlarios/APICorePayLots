@@ -99,6 +99,11 @@ namespace Dapper.Infrastructure.Repository
         await conn.OpenAsync();
         var result = await conn.ExecuteScalarAsync(sql: query, param: paramet, commandTimeout: 0, commandType: CommandType.StoredProcedure);
 
+        string IdentityUser = ((DynamicParameters)paramet).Get<string>("IdentityUser");
+        string ErrorSql = ObtenerErrorSQL(IdentityUser);
+        if(ErrorSql!="")
+          throw new ApiException(ErrorSql);
+
 
         return result;
       }
@@ -122,7 +127,7 @@ namespace Dapper.Infrastructure.Repository
     public string ObtenerErrorSQL(string IdentityUser)
     {
       var error = _context.Set<ErrorSql>().Where(p => p.IdentityUser == IdentityUser).Select(s => new { s.ErrorSql1 });
-      return error.ToString();
+      return error==null ? "":error.ToString();
     }
 
     public async Task<string> Filter(string query)

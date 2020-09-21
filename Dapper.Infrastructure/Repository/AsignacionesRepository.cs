@@ -43,10 +43,19 @@ namespace Dapper.Infrastructure.Repository
       queryParameters.Add("@UUA", user);
 
       var result = await ExecuteSP("SP_AsignacionCrearActualizar",queryParameters);
-      if(result!=null) return (int)result; else return 0;
+      if(result!=null) return (int)result; else return 0;    
 
-      
+    }
 
+    public async Task AnularAsignacion(int id)
+    {
+     string user = _userAccesor.GetCurrentUser();
+     var queryParameters = new DynamicParameters();
+     queryParameters.Add("@IdAsignacion",id);
+     queryParameters.Add("@UUA",user);
+     queryParameters.Add("@IdentityUser",GenerarIdentidad(user));
+     var result = await ExecuteSP("SP_AnularAsignacion",queryParameters);
+     
     }
   }
 }

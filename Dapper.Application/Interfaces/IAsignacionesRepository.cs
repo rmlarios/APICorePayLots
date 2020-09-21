@@ -8,6 +8,6 @@ namespace Dapper.Application.Interfaces
 {
     public interface IAsignacionesRepository : IGenericDapperRepository<Asignaciones>
     {
-
+        public void AnularAsignacion (int id);
     }
 }

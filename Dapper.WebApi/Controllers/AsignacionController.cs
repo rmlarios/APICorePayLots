@@ -27,23 +27,20 @@ namespace Dapper.WebApi.Controllers
       _repository = repository;
     }
 
-    // GET api/ByBenef/5
-    [HttpGet("GetporBenef/{id}")]
+    // GET api/GetbyBenef/5
+    [HttpGet("GetbyBenef/{id}")]
     public async Task<Response<ViewAsignacionesLotes>> GetbyBenef(int id)
-    {
-      Expression<Func<ViewAsignacionesLotes,bool>> exp = a =>a.IdBeneficiario== id;
-      //return new Response<ViewAsignacionesLotes>(await _repository.FindAsync(exp,new ViewAsignacionesLotes()));
+    {      
       return new Response<ViewAsignacionesLotes>(await _repository.FindAsync<ViewAsignacionesLotes>(a=>a.IdBeneficiario==id));
       //return new Response<ViewAsignacionesLotes>(await _repository.GetAsignacionesBeneficiario(id));
     }
 
-    //GET api/GetByState
-    [HttpGet("GetDatosAsignacion/{id}")]
-    public async Task<Response<ViewAsignacionesSaldo>> GetDatosAsignaciones(int id)
-    {      
-      //return new Response<ViewAsignacionesSaldo>(await _repository.GetDatosAsignacion(id));      
+    //GET api/GetbyId
+    [HttpGet("GetbyId/{id}")]
+    public async Task<Response<ViewAsignacionesSaldo>> GetbyId(int id)
+    {     
       Expression<Func<ViewAsignacionesSaldo,bool>> exp = a =>a.IdAsignacion == id;
-      return new Response<ViewAsignacionesSaldo>(await _repository.FindAsync(exp));
+      return new Response<ViewAsignacionesSaldo>(await _repository.FindAsync<ViewAsignacionesSaldo>(exp));
     }
 
     // POST api/asignacion
