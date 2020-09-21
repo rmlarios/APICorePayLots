@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
+using Dapper.Application.DTOs.RequestModels;
 //using Dapper.WebApi.Models;
 
 namespace Dapper.WebApi.Controllers
@@ -52,6 +53,14 @@ namespace Dapper.WebApi.Controllers
       return new Response<Asignaciones>(asignacion, "Creado Correctamente");
     }
 
+    //POST api/asignacion/Anular/5
+    [HttpPost("Anular/{id}")]
+    public async Task<Response<string>> PostAnular (AnularAsignacionRequest request)
+    {
+      await _repository.AnularAsignacion(request);
+      return new Response<string>("Anulada Correctamente");
+    }
+
     // PUT api/asignacion/5
     [HttpPut("{id}")]
     public async Task<Response<Asignaciones>> PutUpdate(Asignaciones asignacion)
@@ -65,6 +74,7 @@ namespace Dapper.WebApi.Controllers
       return new Response<Asignaciones>("Se ha producido algún error");
 
     }
+    
 
     // DELETE api/asignacion/5
     [HttpDelete("{id}")]

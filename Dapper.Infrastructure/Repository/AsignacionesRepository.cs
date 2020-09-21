@@ -9,6 +9,7 @@ using Dapper.Core.Model;
 using Dapper.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Dapper.Application.DTOs.RequestModels;
 
 namespace Dapper.Infrastructure.Repository
 {
@@ -39,7 +40,7 @@ namespace Dapper.Infrastructure.Repository
       queryParameters.Add("@TasaInteres", asignacion.TasaInteres);
       queryParameters.Add("@PlazoMeses", asignacion.Plazo);
       queryParameters.Add("@Observaciones", asignacion.Observaciones);
-      queryParameters.Add("@IdentityUser", "SPTest");
+      queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
       queryParameters.Add("@UUA", user);
 
       var result = await ExecuteSP("SP_AsignacionCrearActualizar",queryParameters);
@@ -47,15 +48,16 @@ namespace Dapper.Infrastructure.Repository
 
     }
 
-    public async Task AnularAsignacion(int id)
+    public async Task AnularAsignacion(AnularAsignacionRequest request)
     {
      string user = _userAccesor.GetCurrentUser();
      var queryParameters = new DynamicParameters();
-     queryParameters.Add("@IdAsignacion",id);
+     queryParameters.Add("@IdAsignacion",request.IdAsignacion);
+     queryParameters.Add("@Observaciones",request.Observaciones);
      queryParameters.Add("@UUA",user);
      queryParameters.Add("@IdentityUser",GenerarIdentidad(user));
      var result = await ExecuteSP("SP_AnularAsignacion",queryParameters);
-     
+
     }
   }
 }

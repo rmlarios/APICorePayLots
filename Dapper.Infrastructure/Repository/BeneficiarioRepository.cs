@@ -46,6 +46,7 @@ namespace Dapper.Infrastructure.Repository
     }
     public override async Task<bool> DeleteAsync(int id)
     {
+      
       string user = _userAccesor.GetCurrentUser();
       var IdentityUser = GenerarIdentidad(user);
       var queryParameters = new DynamicParameters();
@@ -53,10 +54,7 @@ namespace Dapper.Infrastructure.Repository
       queryParameters.Add("@UUA", user);
       queryParameters.Add("@IdentityUser", IdentityUser);
       var result = await ExecuteSP("SP_BeneficiarioEliminar", queryParameters);
-      if (ObtenerErrorSQL(IdentityUser) != "")
-        return false;
-      else
-        return true;
+      return true;
 
     }
 
