@@ -20,43 +20,17 @@ namespace Dapper.WebApi.Controllers
       _repository = repository;
     }
 
-    // GET api/GetbyUbicaciones
+    /// GET api/GetbyUbicaciones
+    /// <summary>
+    /// Obtiene los Bloques por Proyetco
+    /// </summary>
+    /// <param name="id">Id del proyecto a filtrar</param>
+    /// <returns>Lista de Bloques filtrados</returns>
     [HttpGet("GetbyUbicacion/{id}")]
     public async Task<Response<ViewConsolidadoBloques>> GetbyUbicaciones(int id)
     {      
       return new Response<ViewConsolidadoBloques>(await _repository.FindAsync<ViewConsolidadoBloques>(a => a.IdUbicacion==id));      
-    }
+    }     
 
-   /*  // POST api/bloque
-    [HttpPost("Create")]
-    public async Task<Response<Ubicaciones>> PostCreate(Bloques bloque)
-    {
-      var result = await _repository.AddUpdateAsync(bloque);
-      ubicacion.IdUbicacion = (int)result;
-      return new Response<Ubicaciones>(ubicacion, "Creado Correctamente");
-    } */
-
-    // PUT api/ubicacion/5
-    [HttpPut("{id}")]
-    public async Task<Response<Bloques>> PutUpdate(Bloques bloque)
-    {
-      var obj = await _repository.GetByIdAsync(bloque.IdBloque);
-      if (obj != null)
-      {
-        var result = await _repository.AddUpdateAsync(bloque);
-        return new Response<Bloques>(await _repository.GetByIdAsync(bloque.IdBloque), "Actualizado Correctamente");
-      }
-      return new Response<Bloques>("Se ha producido algún error");
-
-    }        
-
-    // DELETE api/ubicacion/5
-    [HttpDelete("{id}")]
-    public async Task<Response<string>> DeleteById(int id)
-    {
-      var obj = await _repository.GetByIdAsync(id);
-      var result = await _repository.DeleteAsync(id);
-      return new Response<string>("Eliminado Correctamente");
-    }
   }
 }

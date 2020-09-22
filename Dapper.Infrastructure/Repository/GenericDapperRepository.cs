@@ -86,9 +86,7 @@ namespace Dapper.Infrastructure.Repository
     public async Task<object> ExecuteSP(string query, object paramet)
     {
       using (var conn = new SqlConnection(_connectionstring))
-      {
-        var p = new DynamicParameters();
-
+      {       
         await conn.OpenAsync();
         var result = await conn.ExecuteScalarAsync(sql: query, param: paramet, commandTimeout: 0, commandType: CommandType.StoredProcedure);
 

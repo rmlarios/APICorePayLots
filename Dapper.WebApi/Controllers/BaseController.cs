@@ -23,7 +23,12 @@ namespace Dapper.WebApi.Controllers
       _repo = repo;
     }
 
+    
     // GET api/{T}/Listar
+    /// <summary>
+    /// Lista todos los registros de la entidad
+    /// </summary>
+    /// <returns>Lista de registros</returns>
     [HttpGet("Listar")]
     public async Task<IReadOnlyList<T>> GetAll()
     {
@@ -31,19 +36,64 @@ namespace Dapper.WebApi.Controllers
     }
 
     // GET api/{T}/5
+    /// <summary>
+    /// Busca un registro basado en su Key
+    /// </summary>
+    /// <param name="id">Id a buscar</param>
+    /// <returns>El registro buscado</returns>
     [HttpGet("{id}")]
-    public async Task<T> GetById(int id)
+    public async Task<Response<T>> GetById(int id)
     {
-      return await _repo.GetByIdAsync(id);
+      return new Response<T>(await _repo.GetByIdAsync(id));
     }
 
-    // POST api/bloque
-    [HttpPost("CreateNew")]
+    // POST api/{T}
+    /// <summary>
+    /// Agrega un registro a la Base de Datos
+    /// </summary>
+    /// <param name="entity">Clase con los valor a agregar</param>
+    /// <returns>El registro creado</returns>
+    [HttpPost("Create")]
     public async Task<Response<T>> PostCreate(T entity)
     {
       var result = await _repo.AddUpdateAsync(entity);
       var inserted = await _repo.GetByIdAsync((int)result);
       return new Response<T>(inserted, "Creado Correctamente");
+    }
+
+    //PUT api/{T}/5
+    /// <summary>
+    /// Actualiza un registro de la Base de Datos
+    /// </summary>
+    /// <param name="id">Key del registro a actulizar</param>
+    /// <param name="entity">Clase con los valores a actualizar</param>
+    /// <returns>El registro actualizado</returns>
+    [HttpPut("{id}")]
+    public async Task<Response<T>> PutUpdate(int id, T entity)
+    {
+      var obj = await _repo.GetByIdAsync(id);
+      if (obj != null)
+      {
+        var result = await _repo.AddUpdateAsync(entity);
+        return new Response<T>(await _repo.GetByIdAsync(id), "Actualizado Correctamente");
+      }
+      return new Response<T>("Se ha producido algún error");
+
+    }
+
+
+    // DELETE api/ubicacion/5
+    /// <summary>
+    /// Elimina un registro de la Base de Datos
+    /// </summary>
+    /// <param name="id">Key del registro a eliminar</param>
+    /// <returns>Mensaje de confirmación de la acción</returns>
+    [HttpDelete("{id}")]
+    public async Task<Response<string>> DeleteById(int id)
+    {
+      var obj = await _repo.GetByIdAsync(id);
+      var result = await _repo.DeleteAsync(id);
+      return new Response<string>("Eliminado Correctamente",true);
     }
 
 

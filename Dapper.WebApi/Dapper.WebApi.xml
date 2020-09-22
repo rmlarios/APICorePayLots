@@ -4,5 +4,40 @@
         <name>Dapper.WebApi</name>
     </assembly>
     <members>
+        <member name="M:Dapper.WebApi.Controllers.BaseController`1.GetAll">
+            <summary>
+            Lista todos los registros de la entidad
+            </summary>
+            <returns>Lista de registros</returns>
+        </member>
+        <member name="M:Dapper.WebApi.Controllers.BaseController`1.GetById(System.Int32)">
+            <summary>
+            Busca un registro basado en su Key
+            </summary>
+            <param name="id">Id a buscar</param>
+            <returns>El registro buscado</returns>
+        </member>
+        <member name="M:Dapper.WebApi.Controllers.BaseController`1.PostCreate(`0)">
+            <summary>
+            Agrega un registro a la Base de Datos
+            </summary>
+            <param name="entity">Clase con los valor a agregar</param>
+            <returns>El registro creado</returns>
+        </member>
+        <member name="M:Dapper.WebApi.Controllers.BaseController`1.PutUpdate(System.Int32,`0)">
+            <summary>
+            Actualiza un registro de la Base de Datos
+            </summary>
+            <param name="id">Key del registro a actulizar</param>
+            <param name="entity">Clase con los valores a actualizar</param>
+            <returns>El registro actualizado</returns>
+        </member>
+        <member name="M:Dapper.WebApi.Controllers.BaseController`1.DeleteById(System.Int32)">
+            <summary>
+            Elimina un registro de la Base de Datos
+            </summary>
+            <param name="id">Key del registro a eliminar</param>
+            <returns>Mensaje de confirmación de la acción</returns>
+        </member>
     </members>
 </doc>

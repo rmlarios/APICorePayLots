@@ -28,6 +28,11 @@ namespace Dapper.WebApi.Controllers
     }
 
     // GET api/GetbyBenef/5
+    /// <summary>
+    /// Listar Asignaciones por Beneficiario
+    /// </summary>
+    /// <param name="id">Key del Beneficiario</param>
+    /// <returns>Lista de asignaciones obtenidas</returns>
     [HttpGet("GetbyBenef/{id}")]
     public async Task<Response<ViewAsignacionesLotes>> GetbyBenef(int id)
     {      
@@ -36,42 +41,30 @@ namespace Dapper.WebApi.Controllers
     }
 
     //GET api/GetbyId
-    [HttpGet("GetbyId/{id}")]
-    public async Task<Response<ViewAsignacionesSaldo>> GetbyId(int id)
+    /// <summary>
+    /// Obtiene los datos de una Asignacion
+    /// </summary>
+    /// <param name="id">Key de la Asignacion a buscar</param>
+    /// <returns>Datos de la asignacion</returns>
+    [HttpGet("GetDatosbyId/{id}")]
+    public async Task<Response<ViewAsignacionesSaldo>> GetDatosbyId(int id)
     {     
       Expression<Func<ViewAsignacionesSaldo,bool>> exp = a =>a.IdAsignacion == id;
       return new Response<ViewAsignacionesSaldo>(await _repository.FindAsync<ViewAsignacionesSaldo>(exp));
     }
 
-    // POST api/asignacion
-    [HttpPost("Create")]
-    new public async Task<Response<Asignaciones>> PostCreate(Asignaciones asignacion)
-    {
-      var result = await _repository.AddUpdateAsync(asignacion);
-      asignacion.IdAsignacion = (int) result;
-      return new Response<Asignaciones>(asignacion, "Creado Correctamente");
-    }
-
     //POST api/asignacion/Anular/5
+    /// <summary>
+    /// Anular una Asignacion
+    /// </summary>
+    /// <param name="request">Key de la Asignacion a anular y Motivo de Anulación</param>
+    /// <returns>Mensaje de confirmacion</returns>
     [HttpPost("Anular/{id}")]
     public async Task<Response<string>> PostAnular (AnularAsignacionRequest request)
     {
       await _repository.AnularAsignacion(request);
-      return new Response<string>("Anulada Correctamente");
+      return new Response<string>("Anulada Correctamente",true);
     }
 
-    // PUT api/asignacion/5
-    [HttpPut("{id}")]
-    public async Task<Response<Asignaciones>> PutUpdate(Asignaciones asignacion)
-    {
-      var obj = await _repository.GetByIdAsync(asignacion.IdAsignacion);
-      if (obj != null)
-      {
-        var result = await _repository.AddUpdateAsync(asignacion);
-        return new Response<Asignaciones>(await _repository.GetByIdAsync(asignacion.IdAsignacion), "Actualizado Correctamente");
-      }
-      return new Response<Asignaciones>("Se ha producido algún error");
-
-    }        
   }
 }

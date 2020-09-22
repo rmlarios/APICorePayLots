@@ -23,6 +23,10 @@ namespace Dapper.Infrastructure
             services.AddScoped<IAsignacionesRepository,AsignacionesRepository>();
             services.AddTransient<IUbicacionRepository,UbicacionRepository>();
             services.AddTransient<IBloqueRepository,BloqueRepository>();
+            services.AddTransient<ILoteRepository,LoteRepository>();
+            services.AddTransient<IMoraRepository,MoraRepository>();
+            services.AddTransient<IProformaRepository,ProformaRepository>();
+            services.AddTransient<IPagoRepository,PagoRepository>();
         }
     }
 }

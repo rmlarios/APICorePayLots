@@ -12,7 +12,6 @@ namespace Dapper.WebApi.Extensions
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "CleanArchitecture.WebApi");
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CleanArchitecture.WebApi");
             });
         }
 

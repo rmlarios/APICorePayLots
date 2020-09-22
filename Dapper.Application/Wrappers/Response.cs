@@ -20,9 +20,9 @@ namespace Dapper.Application.Wrappers
             Message = message;
             Data = data;
         }
-        public Response(string message)
+        public Response(string message,bool success=false)
         {
-            Succeeded = false;
+            Succeeded = success;
             Message = message;
         }
         public bool Succeeded { get; set; }

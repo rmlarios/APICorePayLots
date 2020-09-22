@@ -22,36 +22,6 @@ namespace Dapper.WebApi.Controllers
     {
       _repository = beneficiarioRepository;
     }
-
-    // POST api/beneficiario
-    [HttpPost("Create")]
-    public async Task<Response<Beneficiarios>> PostCreate(Beneficiarios beneficiario)
-    {
-      var id = await _repository.AddUpdateAsync(beneficiario);
-      beneficiario.IdBeneficiario = (int)id;
-      return new Response<Beneficiarios>(beneficiario, "Creado Correctamente");
-    }
-
-    // PUT api/beneficiario/5
-    [HttpPut("{id}")]
-    public async Task<Response<Beneficiarios>> PutUpdate(int id, Beneficiarios beneficiario)
-    {
-      if (id != beneficiario.IdBeneficiario)
-        throw new ApiException("Error al tratar de actualizar");
-      var obj = await _repository.GetByIdAsync(beneficiario.IdBeneficiario);
-      var result = await _repository.AddUpdateAsync(beneficiario);
-      return new Response<Beneficiarios>(await _repository.GetByIdAsync(beneficiario.IdBeneficiario), "Actualizado Correctamente");
-    }
-
-    // DELETE api/beneficiario/5
-    [HttpDelete("{id}")]
-    public async Task<Response<string>> DeleteById(int id)
-    {
-      var obj = await _repository.GetByIdAsync(id);
-      var result = await _repository.DeleteAsync(id);
-
-      return new Response<string>("Eliminado Correctamente");
-
-    }
+    
   }
 }

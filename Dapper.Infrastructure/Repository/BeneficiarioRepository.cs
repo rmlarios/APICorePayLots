@@ -13,14 +13,11 @@ namespace Dapper.Infrastructure.Repository
 {
   public class BeneficiarioRepository : GenericDapperRepository<Beneficiarios>, IBeneficiarioRepository
   {
-    private readonly IUserAccesor _userAccesor;
-    private readonly PayLotsDBContext _context;
+    private readonly IUserAccesor _userAccesor;   
 
     public BeneficiarioRepository(IConfiguration configuration, IUserAccesor userAccesor, PayLotsDBContext context) : base(configuration, context)
     {
-      _userAccesor = userAccesor;
-      _context = context;
-
+      _userAccesor = userAccesor;      
     }
 
     public override async Task<int> AddUpdateAsync(Beneficiarios beneficiario)

@@ -22,7 +22,7 @@ namespace Dapper.WebApi.Extensions
                     {
                         Name = "Miguel Larios",
                         Email = "mlariosc7@gmail.com",
-                        Url = new Uri("https://www.solutionsappeu.com/"),
+                        Url = new Uri("https://github.com/rmlarios"),
                     }
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
