@@ -22,17 +22,12 @@ namespace Dapper.Infrastructure.Repository
   public class GenericDapperRepository<T> : IGenericDapperRepository<T> where T : class
   {
     public readonly string _connectionstring;
-    private readonly string _tableName;
-    private readonly string _idfieldname;
-
     private readonly PayLotsDBContext _context;
 
 
-    public GenericDapperRepository(IConfiguration configuration, string TableName, string IDFieldName, PayLotsDBContext context)
+    public GenericDapperRepository(IConfiguration configuration, PayLotsDBContext context)
     {
-      _connectionstring = configuration.GetConnectionString("PayLotsConnectionString");
-      _tableName = TableName;
-      _idfieldname = IDFieldName;
+      _connectionstring = configuration.GetConnectionString("PayLotsConnectionString");     
       _context = context;
 
     }
@@ -49,12 +44,7 @@ namespace Dapper.Infrastructure.Repository
 
     public async Task<IReadOnlyList<T>> GetAllAsync()
     {
-      using (var connection = new SqlConnection(_connectionstring))
-      {
-        connection.Open();
-        var result = await connection.QueryAsync<T>("SELECT * FROM " + _tableName);
-        return result.ToList();
-      }
+      return await _context.Set<T>().ToListAsync();
     }
 
     public async Task<T> GetByIdAsync(int id)
@@ -79,9 +69,12 @@ namespace Dapper.Infrastructure.Repository
       } */
     }
 
-    public async Task<List<M>> FindAsync<M>(Expression<Func<M, bool>> expression) where M : class
+    public async Task<List<M>> FindAsync<M>(Expression<Func<M, bool>> expression=null) where M : class
     {
-      return await _context.Set<M>().Where(expression).ToListAsync();
+      if(expression!=null)
+        return await _context.Set<M>().Where(expression).ToListAsync();
+      else
+       return await _context.Set<M>().ToListAsync();
     }
     #region :::::::::UTILIDADES
     /// <summary>
@@ -126,7 +119,8 @@ namespace Dapper.Infrastructure.Repository
     /// <returns></returns>
     public string ObtenerErrorSQL(string IdentityUser)
     {
-      var error = _context.Set<ErrorSql>().Where(p => p.IdentityUser == IdentityUser).Select(s => new { s.ErrorSql1 });
+      //var error = _context.Set<ErrorSql>().Where(p => p.IdentityUser == IdentityUser).Select(s => new { s.ErrorSql1 });
+      var error = _context.Set<ErrorSql>().Where(p => p.IdentityUser==IdentityUser).Select(s => s.ErrorSql1).FirstOrDefault();
       return error==null ? "":error.ToString();
     }
 

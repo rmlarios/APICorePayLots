@@ -16,7 +16,6 @@ using Dapper.Application.DTOs.RequestModels;
 
 namespace Dapper.WebApi.Controllers
 {
-  [Authorize]
   [Route("api/[controller]")]
   [ApiController]
   public class AsignacionController : BaseController<Asignaciones>
@@ -46,7 +45,7 @@ namespace Dapper.WebApi.Controllers
 
     // POST api/asignacion
     [HttpPost("Create")]
-    public async Task<Response<Asignaciones>> PostCreate(Asignaciones asignacion)
+    new public async Task<Response<Asignaciones>> PostCreate(Asignaciones asignacion)
     {
       var result = await _repository.AddUpdateAsync(asignacion);
       asignacion.IdAsignacion = (int) result;
@@ -73,22 +72,6 @@ namespace Dapper.WebApi.Controllers
       }
       return new Response<Asignaciones>("Se ha producido algún error");
 
-    }
-    
-
-    // DELETE api/asignacion/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteById(int id)
-    {
-      var obj = await _repository.GetByIdAsync(id);
-      if (obj != null)
-      {
-        var result = await _repository.DeleteAsync(id);
-        if (result) return Ok("Registro Eliminado."); else return NotFound();
-      }
-
-      return BadRequest("Se ha producido algún error.");
-
-    }
+    }        
   }
 }

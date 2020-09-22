@@ -7,6 +7,7 @@ namespace Dapper.Core.Model
 {
     public partial class ViewConsolidadoUbicaciones
     {
+       
         public int IdUbicacion { get; set; }
         public string NombreProyecto { get; set; }
         [Column("Id_Municipio")]

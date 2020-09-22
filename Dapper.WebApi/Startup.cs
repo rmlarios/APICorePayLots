@@ -53,7 +53,7 @@ namespace Dapper.WebApi
             app.UseAuthentication();
             app.UseAuthorization();            
             app.UseSwaggerExtension();
-           
+            app.UseErrorHandlingMiddleware();           
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

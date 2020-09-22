@@ -16,11 +16,13 @@ namespace Dapper.Infrastructure
         {
             //DBContext
             services.AddDbContext<PayLotsDBContext>(options => options.UseSqlServer(configuration.GetConnectionString("PayLotsConnectionString")));
-            services.AddTransient<IProductRepository, ProductRepository>();
+            
             //services.AddTransient<IBeneficiarioRepository,BeneficiarioRepository>();
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            
             services.AddScoped<IBeneficiarioRepository,BeneficiarioRepository>();
             services.AddScoped<IAsignacionesRepository,AsignacionesRepository>();
+            services.AddTransient<IUbicacionRepository,UbicacionRepository>();
+            services.AddTransient<IBloqueRepository,BloqueRepository>();
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Dapper.WebApi.Middlewares;
 using Microsoft.AspNetCore.Builder;
 
 namespace Dapper.WebApi.Extensions
@@ -13,6 +14,11 @@ namespace Dapper.WebApi.Extensions
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "CleanArchitecture.WebApi");
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "CleanArchitecture.WebApi");
             });
+        }
+
+        public static void UseErrorHandlingMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<ErrorHandlerMiddleware>();
         }
     }
 }

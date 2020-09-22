@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dapper.WebApi.Controllers
 {
-  [Authorize]
   [Route("api/[controller]")]
   [ApiController]
   public class BeneficiarioController : BaseController<Beneficiarios>
@@ -35,7 +34,7 @@ namespace Dapper.WebApi.Controllers
 
     // PUT api/beneficiario/5
     [HttpPut("{id}")]
-    public async Task<Response<Beneficiarios>> Putstring(int id, Beneficiarios beneficiario)
+    public async Task<Response<Beneficiarios>> PutUpdate(int id, Beneficiarios beneficiario)
     {
       if (id != beneficiario.IdBeneficiario)
         throw new ApiException("Error al tratar de actualizar");

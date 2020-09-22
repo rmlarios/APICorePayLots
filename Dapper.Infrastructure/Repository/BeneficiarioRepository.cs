@@ -16,7 +16,7 @@ namespace Dapper.Infrastructure.Repository
     private readonly IUserAccesor _userAccesor;
     private readonly PayLotsDBContext _context;
 
-    public BeneficiarioRepository(IConfiguration configuration, IUserAccesor userAccesor, PayLotsDBContext context) : base(configuration, "Beneficiarios", "IdBeneficiario", context)
+    public BeneficiarioRepository(IConfiguration configuration, IUserAccesor userAccesor, PayLotsDBContext context) : base(configuration, context)
     {
       _userAccesor = userAccesor;
       _context = context;
@@ -32,7 +32,7 @@ namespace Dapper.Infrastructure.Repository
       queryParameters.Add("@CedulaIdentidad", beneficiario.CedulaIdentidad);
       queryParameters.Add("@Direccion", beneficiario.Direccion);
       queryParameters.Add("@Telefono", beneficiario.Telefono);
-      queryParameters.Add("@IdentityUser", "DapperAtempUpdate");
+      queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
       queryParameters.Add("@UUA", user);
 
       var result = await ExecuteSP("SP_BeneficiarioCrearActualizar", queryParameters);
@@ -45,17 +45,14 @@ namespace Dapper.Infrastructure.Repository
     return (int)affectedRows; */
     }
     public override async Task<bool> DeleteAsync(int id)
-    {
-      
+    {      
       string user = _userAccesor.GetCurrentUser();
-      var IdentityUser = GenerarIdentidad(user);
       var queryParameters = new DynamicParameters();
       queryParameters.Add("@IdBeneficiario", id);
       queryParameters.Add("@UUA", user);
-      queryParameters.Add("@IdentityUser", IdentityUser);
+      queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
       var result = await ExecuteSP("SP_BeneficiarioEliminar", queryParameters);
       return true;
-
     }
 
   }

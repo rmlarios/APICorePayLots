@@ -17,7 +17,7 @@ namespace Dapper.Infrastructure.Repository
   {
     private readonly IUserAccesor _userAccesor;
     //private readonly PayLotsDBContext _context;
-    public AsignacionesRepository(IConfiguration configuration, IUserAccesor userAccesor, PayLotsDBContext context) : base(configuration, "Asignaciones", "IdAsignacion",context)
+    public AsignacionesRepository(IConfiguration configuration, IUserAccesor userAccesor, PayLotsDBContext context) : base(configuration,context)
     {
       _userAccesor = userAccesor;
       //_context = context;
