@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Serialization;
 
 namespace Dapper.WebApi
 {
@@ -33,7 +34,12 @@ namespace Dapper.WebApi
             services.AddInfrastructure(Configuration);
             services.AddIdentityInfrastructure(Configuration);
             services.AddSwaggerExtension();
-            services.AddControllers().AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore).AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+            services.AddControllers().AddNewtonsoftJson(o => {
+            o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            o.SerializerSettings.ContractResolver = new DefaultContractResolver();
+
+            })
+            .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             
 
             
