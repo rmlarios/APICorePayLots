@@ -98,6 +98,14 @@
             <param name="id">Key de la Asignacion</param>
             <returns>Plan de Pago de la Asignacion solicitada</returns>
         </member>
+        <member name="M:Dapper.WebApi.Controllers.PagoController.GetMesesPagar(System.Int32,System.Int32)">
+            <summary>
+            Lista los meses pendientes de pago e incluye el mes del pago cargado
+            </summary>
+            <param name="id">key de la Asignacion</param>
+            <param name="idpago">key del pago</param>
+            <returns>Datos de los meses a pagar</returns>
+        </member>
         <member name="M:Dapper.WebApi.Controllers.UbicacionController.GetUbicaciones">
             <summary>
             Lista los proyectos registrados con el detalle de Lotes

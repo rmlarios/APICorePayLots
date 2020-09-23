@@ -30,9 +30,9 @@ namespace Dapper.WebApi.Controllers
     /// </summary>
     /// <returns>Lista de registros</returns>
     [HttpGet("Listar")]
-    public async Task<IReadOnlyList<T>> GetAll()
+    public async Task<Response<T>> GetAll()
     {
-      return await _repo.GetAllAsync();
+      return new Response<T>(await _repo.GetAllAsync());
     }
 
     // GET api/{T}/5

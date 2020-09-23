@@ -67,6 +67,24 @@ namespace Dapper.WebApi.Controllers
       return new Response<Asignacion_PlandePago>(plandePago);
     }
 
+    /// <summary>
+    /// Lista los meses pendientes de pago e incluye el mes del pago cargado
+    /// </summary>
+    /// <param name="id">key de la Asignacion</param>
+    /// <param name="idpago">key del pago</param>
+    /// <returns>Datos de los meses a pagar</returns>
+    [HttpGet("GetMesesPagar/{id}")]
+    public async Task<Response<Asignacion_PlandePago>> GetMesesPagar(int id,int idpago)
+    {
+      var result = await _repository.Filter("SELECT MesPagado,Estado,MontoMinimo,ISNULL(Interes,0) Interes,ISNULL(Mora,0) Mora,TotalPagar FROM FN_Asignacion_PlandePago('"+id+"') WHERE (MesPagado!='Prima' and Estado !='Cancelado') OR MesPagado= (SELECT MesPagado FROM Pagos WHERE IdPago="+ idpago +")");
+      if(((JArray)(JsonConvert.DeserializeObject(result))).Count==0)
+          throw new KeyNotFoundException("Asignación no encontrada.");
+
+      List<Asignacion_PlandePago> plandePago = new List<Asignacion_PlandePago>();
+      JsonConvert.PopulateObject(result, plandePago, new JsonSerializerSettings());
+      return new Response<Asignacion_PlandePago>(plandePago);
+    }
+
 
 
   }

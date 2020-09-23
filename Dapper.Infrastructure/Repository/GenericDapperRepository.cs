@@ -42,7 +42,7 @@ namespace Dapper.Infrastructure.Repository
       throw new System.NotImplementedException();
     }
 
-    public async Task<IReadOnlyList<T>> GetAllAsync()
+    public async Task<List<T>> GetAllAsync()
     {
       return await _context.Set<T>().ToListAsync();
     }
