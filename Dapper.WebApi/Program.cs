@@ -22,5 +22,6 @@ namespace Dapper.WebApi
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+                
     }
 }

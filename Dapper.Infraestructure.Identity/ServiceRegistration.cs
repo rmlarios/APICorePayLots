@@ -60,7 +60,11 @@ namespace Dapper.Infraestructure.Identity
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                
             })
+                .AddCookie(o=>{
+                    o.Cookie.Name = "apicookie";
+                })
                 .AddJwtBearer(o =>
                 {
                     o.RequireHttpsMetadata = false;

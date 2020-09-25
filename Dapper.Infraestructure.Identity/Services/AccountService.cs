@@ -117,6 +117,7 @@ namespace Dapper.Infraestructure.Identity.Services
         private async Task<JwtSecurityToken> GenerateJWToken(ApplicationUser user)
         {
             var userClaims = await _userManager.GetClaimsAsync(user);
+            
             var roles = await _userManager.GetRolesAsync(user);
 
             var roleClaims = new List<Claim>();
