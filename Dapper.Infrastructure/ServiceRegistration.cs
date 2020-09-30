@@ -19,6 +19,7 @@ namespace Dapper.Infrastructure
             
             //services.AddTransient<IBeneficiarioRepository,BeneficiarioRepository>();
             
+            services.AddScoped(typeof(IGenericDapperRepository<>),typeof(GenericDapperRepository<>)); 
             services.AddScoped<IBeneficiarioRepository,BeneficiarioRepository>();
             services.AddScoped<IAsignacionesRepository,AsignacionesRepository>();
             services.AddTransient<IUbicacionRepository,UbicacionRepository>();
