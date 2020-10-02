@@ -34,12 +34,13 @@ namespace Dapper.WebApi
             services.AddInfrastructure(Configuration);
             services.AddIdentityInfrastructure(Configuration);
             services.AddSwaggerExtension();
-            services.AddControllers().AddNewtonsoftJson(o => {
-            o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            o.SerializerSettings.ContractResolver = new DefaultContractResolver();
-
-            })
-            .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+            services.AddControllers()
+                .AddNewtonsoftJson(o => {
+                    o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    o.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                })
+                .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
+                .ConfigureApiBehaviorOptions(o=> o.SuppressModelStateInvalidFilter=true);
             
 
             
