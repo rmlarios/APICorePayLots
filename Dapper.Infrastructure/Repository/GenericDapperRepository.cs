@@ -32,7 +32,7 @@ namespace Dapper.Infrastructure.Repository
 
     }
 
-    public virtual Task<int> AddUpdateAsync(T entity)
+    public virtual Task<int> AddUpdateAsync(int id,T entity)
     {
       throw new System.NotImplementedException();
     }

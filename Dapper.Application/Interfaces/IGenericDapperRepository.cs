@@ -12,7 +12,7 @@ namespace Dapper.Application.Interfaces
     {
         Task<T> GetByIdAsync(int id);
         Task<List<T>> GetAllAsync();
-        Task<int> AddUpdateAsync(T entity);
+        Task<int> AddUpdateAsync(int id,T entity);
         Task<bool> DeleteAsync(int id);
         //Task<IReadOnlyList<T>> FindAsync(Expression<Func<T, bool>> expression);
         Task<List<M>> FindAsync<M>(Expression<Func<M, bool>> expression=null) where M : class;

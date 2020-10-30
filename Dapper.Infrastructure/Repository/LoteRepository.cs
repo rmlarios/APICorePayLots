@@ -17,11 +17,11 @@ namespace Dapper.Infrastructure.Repository
         _userAccesor=userAccesor;
     }
 
-    public override async Task<int> AddUpdateAsync(Lotes lote)
+    public override async Task<int> AddUpdateAsync(int id,Lotes lote)
     {       
       string user = _userAccesor.GetCurrentUser();
       var queryParameters = new DynamicParameters();
-      queryParameters.Add("@IdLote", lote.IdLote, dbType: DbType.Int32);
+      queryParameters.Add("@IdLote", id, dbType: DbType.Int32);
       queryParameters.Add("@IdBloque", lote.IdBloque, dbType: DbType.Int32);
       queryParameters.Add("@NumeroLote", lote.NumeroLote);
       queryParameters.Add("@Area", lote.Area);      

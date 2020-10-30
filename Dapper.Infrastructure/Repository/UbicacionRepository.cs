@@ -18,11 +18,11 @@ namespace Dapper.Infrastructure.Repository
       _userAccesor = userAccessor;
     }
 
-    public override async Task<int> AddUpdateAsync(Ubicaciones ubicacion)
+    public override async Task<int> AddUpdateAsync(int id,Ubicaciones ubicacion)
     {
       string user = _userAccesor.GetCurrentUser();
       var queryParameters = new DynamicParameters();
-      queryParameters.Add("@IdUbicacion", ubicacion.IdUbicacion, dbType: DbType.Int32);
+      queryParameters.Add("@IdUbicacion", id, dbType: DbType.Int32);
       queryParameters.Add("@IdMunicipio", ubicacion.IdMunicipio, dbType: DbType.Int32);
       queryParameters.Add("@NombreProyecto", ubicacion.NombreProyecto);
       queryParameters.Add("@Direccion", ubicacion.Direccion);

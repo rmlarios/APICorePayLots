@@ -51,12 +51,13 @@ namespace Dapper.WebApi.Controllers
     /// <summary>
     /// Agrega un registro a la Base de Datos
     /// </summary>
+    /// <param name="id"></param>
     /// <param name="entity">Clase con los valor a agregar</param>
     /// <returns>El registro creado</returns>
     [HttpPost("Create")]
-    public async Task<Response<T>> PostCreate(T entity)
+    public async Task<Response<T>> PostCreate(int id,T entity)
     {
-      var result = await _repo.AddUpdateAsync(entity);
+      var result = await _repo.AddUpdateAsync(id,entity);
       var inserted = await _repo.GetByIdAsync((int)result);
       return new Response<T>(inserted, "Creado Correctamente");
     }
@@ -74,7 +75,7 @@ namespace Dapper.WebApi.Controllers
       var obj = await _repo.GetByIdAsync(id);
       if (obj != null)
       {
-        var result = await _repo.AddUpdateAsync(entity);
+        var result = await _repo.AddUpdateAsync(id,entity);
         return new Response<T>(await _repo.GetByIdAsync(id), "Actualizado Correctamente");
       }
       return new Response<T>("Se ha producido algún error");

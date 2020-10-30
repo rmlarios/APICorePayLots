@@ -17,11 +17,11 @@ namespace Dapper.Infrastructure.Repository
         _userAccesor = userAccesor;
     }
 
-    public override async Task<int> AddUpdateAsync(Mora mora)
+    public override async Task<int> AddUpdateAsync(int id,Mora mora)
     {       
       string user = _userAccesor.GetCurrentUser();
       var queryParameters = new DynamicParameters();
-      queryParameters.Add("@IdMora", mora.IdMora, dbType: DbType.Int32);
+      queryParameters.Add("@IdMora", id, dbType: DbType.Int32);
       queryParameters.Add("@Minimo", mora.Minimo, dbType: DbType.Int32);
       queryParameters.Add("@Maximo", mora.Maximo, dbType: DbType.Int32);
       queryParameters.Add("@Porcentaje", mora.Porcentaje, dbType: DbType.Decimal);      

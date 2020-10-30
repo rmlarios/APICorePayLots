@@ -17,11 +17,11 @@ namespace Dapper.Infrastructure.Repository
         _userAccesor = userAccesor;
     }
 
-    public override async Task<int> AddUpdateAsync(Proformas proforma)
+    public override async Task<int> AddUpdateAsync(int id,Proformas proforma)
     {       
       string user = _userAccesor.GetCurrentUser();
       var queryParameters = new DynamicParameters();
-      queryParameters.Add("@IdProforma", proforma.IdProforma, dbType: DbType.Int32);
+      queryParameters.Add("@IdProforma", id, dbType: DbType.Int32);
       queryParameters.Add("@Nombre", proforma.Nombre);
       queryParameters.Add("@Domicilio", proforma.Domicilio);
       queryParameters.Add("@Telefono", proforma.Telefono);

@@ -20,11 +20,11 @@ namespace Dapper.Infrastructure.Repository
       _userAccesor = userAccesor;      
     }
 
-    public override async Task<int> AddUpdateAsync(Beneficiarios beneficiario)
+    public override async Task<int> AddUpdateAsync(int id,Beneficiarios beneficiario)
     {
       string user = _userAccesor.GetCurrentUser();
       var queryParameters = new DynamicParameters();
-      queryParameters.Add("@IdBeneficiario", beneficiario.IdBeneficiario);
+      queryParameters.Add("@IdBeneficiario", id);
       queryParameters.Add("@NombreCompleto", beneficiario.NombreCompleto);
       queryParameters.Add("@CedulaIdentidad", beneficiario.CedulaIdentidad);
       queryParameters.Add("@Direccion", beneficiario.Direccion);
