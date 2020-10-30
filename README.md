@@ -1,13 +1,11 @@
-# Dapper in ASP.NET Core with Repository Pattern
-Let's Learn Dapper with ASP. NET Core!
-In this article, we will talk about the basics of Dapper and it's seamless implementation in ASP. NET Core.
+Web API Rest desarrollada en ASP.Net Core 3.1
+Basada en: https://www.codewithmukesh.com/blog/dapper-in-aspnet-core/
 
-Topics covered.
-1. What is Dapper?
-2. Implementation of Dapper.
-3. Repository Pattern and Unit of Work
-4. Simple and Clean Architecture ( Onion )
-5. Testing with Swagger.
+Implementando
+1. Dapper Micro ORM.
+2. EnttityFramework Core.
+3. Patrón Repositorio.
+4. Arquitectura Limpia.
+5. Swagger.
+6. Autenticación de Usuario con Identity y JWT.
 
-Read more here :
-https://www.codewithmukesh.com/blog/dapper-in-aspnet-core/
