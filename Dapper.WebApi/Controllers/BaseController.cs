@@ -70,7 +70,7 @@ namespace Dapper.WebApi.Controllers
     /// <param name="entity">Clase con los valores a actualizar</param>
     /// <returns>El registro actualizado</returns>
     [HttpPut("{id}")]
-    public async Task<Response<T>> PutUpdate(int id, T entity)
+    public async Task<Response<T>> PutUpdate(int id,[FromBody] T entity)
     {
       var obj = await _repo.GetByIdAsync(id);
       if (obj != null)

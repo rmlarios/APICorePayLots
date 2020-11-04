@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Nullable>warnings</Nullable>
+    <UserSecretsId>71564aeb-8918-4fee-8945-799929b4df63</UserSecretsId>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>Dapper.WebApi.xml</DocumentationFile>
