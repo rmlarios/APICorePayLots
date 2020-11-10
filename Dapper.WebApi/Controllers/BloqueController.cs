@@ -28,9 +28,17 @@ namespace Dapper.WebApi.Controllers
     /// <returns>Lista de Bloques filtrados</returns>
     [HttpGet("GetbyUbicacion/{id}")]
     public async Task<Response<ViewConsolidadoBloques>> GetbyUbicaciones(int id)
-    {      
-      return new Response<ViewConsolidadoBloques>(await _repository.FindAsync<ViewConsolidadoBloques>(a => a.IdUbicacion==id));      
-    }     
+    {       
+          return new Response<ViewConsolidadoBloques>(await _repository.FindAsync<ViewConsolidadoBloques>(a => a.IdUbicacion==id));                 
+    }
+
+    [HttpGet("GetBloques")]
+    public async Task<Response<ViewBloquesUbicacion>> GetBloques()
+    {
+      return new Response<ViewBloquesUbicacion>(await _repository.GetAllData<ViewBloquesUbicacion>());
+    }
+
+
 
   }
 }

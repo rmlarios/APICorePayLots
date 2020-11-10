@@ -47,6 +47,11 @@ namespace Dapper.Infrastructure.Repository
       return await _context.Set<T>().ToListAsync();
     }
 
+    public async Task<List<M>> GetAllData<M>() where M: class
+    {
+      return await _context.Set<M>().ToListAsync();
+    } 
+
     public async Task<T> GetByIdAsync(int id)
     {
       //return await _context.Set<T>().FindAsync(id);

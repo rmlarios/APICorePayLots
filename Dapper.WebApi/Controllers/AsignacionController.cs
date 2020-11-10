@@ -27,6 +27,17 @@ namespace Dapper.WebApi.Controllers
       _repository = repository;
     }
 
+    
+    /// <summary>
+    /// Listar Asignaciones
+    /// </summary>    
+    /// <returns>Lista de asignaciones con datos de saldo y abonos</returns>
+    [HttpGet("GetAsignaciones")]
+    public async Task<Response<ViewAsignacionesSaldo>> GetAsignaciones()
+    {
+      return new Response<ViewAsignacionesSaldo>(await _repository.GetAllData<ViewAsignacionesSaldo>());
+    }
+
     // GET api/GetbyBenef/5
     /// <summary>
     /// Listar Asignaciones por Beneficiario

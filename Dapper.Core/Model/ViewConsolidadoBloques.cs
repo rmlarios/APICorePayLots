@@ -19,5 +19,6 @@ namespace Dapper.Core.Model
         public string Bloque { get; set; }
         public int? Disponibles { get; set; }
         public int? Asignados { get; set; }
+        public string Observaciones {get; set;}
     }
 }

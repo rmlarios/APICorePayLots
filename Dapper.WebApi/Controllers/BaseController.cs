@@ -24,6 +24,7 @@ namespace Dapper.WebApi.Controllers
     }
 
     
+    
     // GET api/{T}/Listar
     /// <summary>
     /// Lista todos los registros de la entidad

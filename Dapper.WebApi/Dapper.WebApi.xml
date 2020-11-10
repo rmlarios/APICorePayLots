@@ -4,6 +4,12 @@
         <name>Dapper.WebApi</name>
     </assembly>
     <members>
+        <member name="M:Dapper.WebApi.Controllers.AsignacionController.GetAsignaciones">
+            <summary>
+            Listar Asignaciones
+            </summary>    
+            <returns>Lista de asignaciones con datos de saldo y abonos</returns>
+        </member>
         <member name="M:Dapper.WebApi.Controllers.AsignacionController.GetbyBenef(System.Int32)">
             <summary>
             Listar Asignaciones por Beneficiario
