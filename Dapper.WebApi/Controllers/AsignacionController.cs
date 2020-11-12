@@ -46,7 +46,8 @@ namespace Dapper.WebApi.Controllers
     /// <returns>Lista de asignaciones obtenidas</returns>
     [HttpGet("GetbyBenef/{id}")]
     public async Task<Response<ViewAsignacionesLotes>> GetbyBenef(int id)
-    {      
+    {
+     
       return new Response<ViewAsignacionesLotes>(await _repository.FindAsync<ViewAsignacionesLotes>(a=>a.IdBeneficiario==id));
       //return new Response<ViewAsignacionesLotes>(await _repository.GetAsignacionesBeneficiario(id));
     }
@@ -60,7 +61,7 @@ namespace Dapper.WebApi.Controllers
     [HttpGet("GetDatosbyId/{id}")]
     public async Task<Response<ViewAsignacionesSaldo>> GetDatosbyId(int id)
     {     
-      Expression<Func<ViewAsignacionesSaldo,bool>> exp = a =>a.IdAsignacion == id;
+      Expression<Func<ViewAsignacionesSaldo,bool>> exp = a =>a.IdAsignacion == id;     
       return new Response<ViewAsignacionesSaldo>(await _repository.FindAsync<ViewAsignacionesSaldo>(exp));
     }
 

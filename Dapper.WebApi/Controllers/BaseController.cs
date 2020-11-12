@@ -56,9 +56,9 @@ namespace Dapper.WebApi.Controllers
     /// <param name="entity">Clase con los valor a agregar</param>
     /// <returns>El registro creado</returns>
     [HttpPost("Create")]
-    public async Task<Response<T>> PostCreate(int id,T entity)
+    public async Task<Response<T>> PostCreate(T entity)
     {
-      var result = await _repo.AddUpdateAsync(id,entity);
+      var result = await _repo.AddUpdateAsync(0,entity);
       var inserted = await _repo.GetByIdAsync((int)result);
       return new Response<T>(inserted, "Creado Correctamente");
     }
@@ -96,6 +96,19 @@ namespace Dapper.WebApi.Controllers
       var obj = await _repo.GetByIdAsync(id);
       var result = await _repo.DeleteAsync(id);
       return new Response<string>("Eliminado Correctamente",true);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    [HttpPost("Save/{id}")]
+    public async Task<Response<T>> PostSave([FromBody] T entity,int id=0)
+    {
+        var result = await _repo.AddUpdateAsync(id,entity);
+        return new Response<T>(await _repo.GetByIdAsync(id), "Actualizado Correctamente");
     }
 
 
