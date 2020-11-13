@@ -108,7 +108,7 @@ namespace Dapper.WebApi.Controllers
     public async Task<Response<T>> PostSave([FromBody] T entity,int id=0)
     {
         var result = await _repo.AddUpdateAsync(id,entity);
-        return new Response<T>(await _repo.GetByIdAsync(id), "Actualizado Correctamente");
+        return new Response<T>(await _repo.GetByIdAsync(result), "Actualizado Correctamente");
     }
 
 
