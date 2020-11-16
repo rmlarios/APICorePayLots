@@ -8,6 +8,7 @@ using Dapper.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Dapper.Application.Wrappers;
+using Microsoft.AspNetCore.Mvc.Filters;
 //using Dapper.WebApi.Models;
 
 namespace Dapper.WebApi.Controllers
@@ -15,13 +16,26 @@ namespace Dapper.WebApi.Controllers
   //[Authorize]
   [Route("api/[controller]")]
   [ApiController]
-  public class BaseController<T> : ControllerBase where T : class
+  public class BaseController<T> : Controller where T : class
   {
     protected IGenericDapperRepository<T> _repo;
     public BaseController(IGenericDapperRepository<T> repo)
     {
       _repo = repo;
     }
+
+    /* public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState
+                .Where(a => a.Value.Errors.Count > 0)
+                .SelectMany(x => x.Value.Errors)
+                .ToList();
+            context.Result = new BadRequestObjectResult(errors);
+        }
+        base.OnActionExecuting(context);
+    } */
 
     
     
@@ -108,26 +122,10 @@ namespace Dapper.WebApi.Controllers
     public async Task<Response<T>> PostSave([FromBody] T entity,int id=0)
     {
         var result = await _repo.AddUpdateAsync(id,entity);
-        return new Response<T>(await _repo.GetByIdAsync(id), "Actualizado Correctamente");
+        return new Response<T>(await _repo.GetByIdAsync(result), "Actualizado Correctamente");
     }
 
 
-    /*  // POST api/base
-      [HttpPost("")]
-      public void Poststring(string value)
-      {
-      }
-
-      // PUT api/base/5
-      [HttpPut("{id}")]
-      public void Putstring(int id, string value)
-      {
-      }
-
-      // DELETE api/base/5
-      [HttpDelete("{id}")]
-      public void DeletestringById(int id)
-      {
-      } */
+    
   }
 }

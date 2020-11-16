@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Dapper.Core.CustomValidations;
 
 namespace Dapper.Core.Model
 {
@@ -22,6 +23,7 @@ namespace Dapper.Core.Model
         [Column(TypeName = "numeric(18, 2)")]
         public decimal? MontoTotal { get; set; }
         [Column(TypeName = "numeric(18, 2)")]
+        [CustomCuotaValidation]
         public decimal? CuotaMinima { get; set; }
         [Column(TypeName = "numeric(18, 2)")]
         public decimal? Prima { get; set; }
