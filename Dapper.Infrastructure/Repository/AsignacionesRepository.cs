@@ -56,7 +56,7 @@ namespace Dapper.Infrastructure.Repository
      queryParameters.Add("@Observaciones",request.Observaciones);
      queryParameters.Add("@UUA",user);
      queryParameters.Add("@IdentityUser",GenerarIdentidad(user));
-     var result = await ExecuteSP("SP_AnularAsignacion",queryParameters);
+     var result = await ExecuteSP("SP_AsignacionAnular",queryParameters);
 
     }
   }

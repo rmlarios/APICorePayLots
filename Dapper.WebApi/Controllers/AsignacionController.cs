@@ -71,7 +71,7 @@ namespace Dapper.WebApi.Controllers
     /// </summary>
     /// <param name="request">Key de la Asignacion a anular y Motivo de Anulación</param>
     /// <returns>Mensaje de confirmacion</returns>
-    [HttpPost("Anular/{id}")]
+    [HttpPost("Anular")]
     public async Task<Response<string>> PostAnular (AnularAsignacionRequest request)
     {
       await _repository.AnularAsignacion(request);
