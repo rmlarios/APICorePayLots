@@ -31,9 +31,9 @@ namespace Dapper.Core.Model
         public decimal? MontoTotal { get; set; }
         [Column(TypeName = "numeric(18, 2)")]
         public decimal Prima { get; set; }
-        [Column(TypeName = "numeric(38, 2)")]
+        [Column(TypeName = "numeric(18, 2)")]
         public decimal Abonado { get; set; }
-        [Column(TypeName = "numeric(38, 2)")]
+        [Column(TypeName = "numeric(18, 2)")]
         public decimal? Saldo { get; set; }
         public int? NumeroAbono { get; set; }
         public string Estado { get; set; }

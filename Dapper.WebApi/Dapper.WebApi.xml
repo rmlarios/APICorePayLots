@@ -90,6 +90,14 @@
             </summary>    
             <returns>Lista de Bloques filtrados</returns>
         </member>
+        <member name="M:Dapper.WebApi.Controllers.PagoController.GetDatosPago(System.Int32)">
+            GET api/pago/GetDatosPago/2
+            <summary>
+            Obtiene el listado de pagos segun algunas condiciones
+            </summary>
+            <param name="id">Id del Pago a buscar</param>
+            <returns>Datos del pago</returns>
+        </member>
         <member name="M:Dapper.WebApi.Controllers.PagoController.GetListado(System.Boolean)">
             GET api/pago/GetListado
             <summary>
