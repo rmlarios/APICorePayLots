@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using Dapper.Application.DTOs.RequestModels;
+using Dapper.Application.Exceptions;
 //using Dapper.WebApi.Models;
 
 namespace Dapper.WebApi.Controllers
@@ -60,9 +61,13 @@ namespace Dapper.WebApi.Controllers
     /// <returns>Datos de la asignacion</returns>
     [HttpGet("GetDatosbyId/{id}")]
     public async Task<Response<ViewAsignacionesSaldo>> GetDatosbyId(int id)
-    {     
-      Expression<Func<ViewAsignacionesSaldo,bool>> exp = a =>a.IdAsignacion == id;     
-      return new Response<ViewAsignacionesSaldo>(await _repository.FindAsync<ViewAsignacionesSaldo>(exp));
+    { 
+      Expression<Func<ViewAsignacionesSaldo,bool>> exp = a =>a.IdAsignacion == id;
+      var result = await _repository.FindAsync<ViewAsignacionesSaldo>(exp);
+      if(result.Count==0)
+       throw new ApiException("Registro no encontrado");
+
+      return new Response<ViewAsignacionesSaldo>(result);
     }
 
     //POST api/asignacion/Anular/5
