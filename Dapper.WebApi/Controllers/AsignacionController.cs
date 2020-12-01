@@ -68,7 +68,7 @@ namespace Dapper.WebApi.Controllers
        throw new ApiException("Registro no encontrado");
 
       return new Response<ViewAsignacionesSaldo>(result);
-    }
+    } 
 
     //POST api/asignacion/Anular/5
     /// <summary>

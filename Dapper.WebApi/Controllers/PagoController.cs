@@ -27,13 +27,13 @@ namespace Dapper.WebApi.Controllers
     /// <summary>
     /// Obtiene el listado de pagos segun algunas condiciones
     /// </summary>
-    /// <param name="id">Id del Pago a buscar</param>
+    ///// <param name="id">Id del Pago a buscar</param>
     /// <returns>Datos del pago</returns>
-    [HttpGet("GetDatosPago/{id}")]
+    /* [HttpGet("GetDatosPago/{id}")]
     public async Task<Response<ViewPagosAsignaciones>> GetDatosPago(int id)
     {
       return new Response<ViewPagosAsignaciones>((await _repository.FindAsync<ViewPagosAsignaciones>(a => a.IdPago == id)).FirstOrDefault());
-    }
+    } */
 
     /// GET api/pago/GetListado
     /// <summary>
