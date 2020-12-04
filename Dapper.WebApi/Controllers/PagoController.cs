@@ -70,13 +70,15 @@ namespace Dapper.WebApi.Controllers
     [HttpGet("GetPlanPago/{id}")]
     public async Task<Response<Asignacion_PlandePago>> GetPlanPago(int id)
     {           
-      var result = await _repository.Filter("SELECT * FROM FN_Asignacion_PlandePago('" + id + "')");
+      /*var result = await _repository.Filter("SELECT * FROM FN_Asignacion_PlandePago('" + id + "')");
        if(((JArray)(JsonConvert.DeserializeObject(result))).Count==0)
           throw new KeyNotFoundException("Asignación no encontrada.");
 
       List<Asignacion_PlandePago> plandePago = new List<Asignacion_PlandePago>();
       JsonConvert.PopulateObject(result, plandePago, new JsonSerializerSettings());
-      return new Response<Asignacion_PlandePago>(plandePago);
+      return new Response<Asignacion_PlandePago>(plandePago);*/
+      var result = await _repository.GenerarPlanPago(id);
+      return new Response<Asignacion_PlandePago>(result);
     }
 
     /// <summary>
@@ -95,6 +97,18 @@ namespace Dapper.WebApi.Controllers
       List<Asignacion_PlandePago> plandePago = new List<Asignacion_PlandePago>();
       JsonConvert.PopulateObject(result, plandePago, new JsonSerializerSettings());
       return new Response<Asignacion_PlandePago>(plandePago);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id">Id del Pago a Generar Ticket</param>
+    /// <returns></returns>
+    [HttpGet("GetTicket/{id}")]
+    public async Task<Response<TicketPago>> GetTicket(int id)
+    {
+      var result = await _repository.GenerarTicket(id);
+      return new Response<TicketPago>(result);
     }
 
 

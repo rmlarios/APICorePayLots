@@ -106,6 +106,28 @@ namespace Dapper.Infrastructure.Repository
       //var result =  await _context.Database.ExecuteSqlRawAsync(sql:query,parameters:paramet);
       //return result;
     }
+    
+    
+    public async Task<List<M>> ExecuteReader<M>(string query,object paramet) where M : class
+    {
+       using (var conn = new SqlConnection(_connectionstring))
+      {       
+        await conn.OpenAsync();
+        //List<M> result = new List<M>();
+        var result = await conn.QueryAsync<M>(query, paramet, commandTimeout: 0, commandType: CommandType.StoredProcedure);
+
+        //var result = await conn.ExecuteReaderAsync(sql: query,param: paramet,commandTimeout:0,commandType: CommandType.StoredProcedure);
+        //var result = await conn.ExecuteScalarAsync(sql: query, param: paramet, commandTimeout: 0, commandType: CommandType.StoredProcedure);
+
+        string IdentityUser = ((DynamicParameters)paramet).Get<string>("IdentityUser");
+        string ErrorSql = ObtenerErrorSQL(IdentityUser);
+        if(ErrorSql!="")
+          throw new ApiException(ErrorSql);
+
+
+        return result.ToList();
+      }
+    }
     /// <summary>
     /// Generar un identificador unico para pasarlo como parámetro a un procedimiento almacenado
     /// </summary>
@@ -134,6 +156,7 @@ namespace Dapper.Infrastructure.Repository
       using (SqlCommand cmd = new SqlCommand(query, conn))
       {
         cmd.CommandType = CommandType.Text;
+        //cmd.Parameters.Add(paramet);
         //cmd.Parameters.AddRange(parameters);
 
         conn.Open();

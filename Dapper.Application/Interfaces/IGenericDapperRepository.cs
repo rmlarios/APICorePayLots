@@ -19,5 +19,6 @@ namespace Dapper.Application.Interfaces
     Task<object> ExecuteSP(string sql, object parameters);
     Task<string> Filter(string condition);
     Task<List<M>> GetAllData<M>() where M : class;
+    
   }
 }

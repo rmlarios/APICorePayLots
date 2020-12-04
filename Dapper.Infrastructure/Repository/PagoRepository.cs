@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Dapper.Application.DTOs.RequestModels;
 using Dapper.Application.Interfaces;
 using Dapper.Application.Interfaces.Account;
 using Dapper.Core.Model;
@@ -51,6 +53,24 @@ namespace Dapper.Infrastructure.Repository
       return true;
     }
 
-    
+    public async Task<List<TicketPago>> GenerarTicket(int id)
+    {
+      string user = _userAccesor.GetCurrentUser();
+      var queryParameters = new DynamicParameters();
+      queryParameters.Add("@IdPago", id);
+      queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
+      var result = await ExecuteReader<TicketPago>("SP_TicketPagoGenerar",queryParameters);
+      return result;
+    }
+
+    public async Task<List<Asignacion_PlandePago>> GenerarPlanPago(int id)
+    {
+       string user = _userAccesor.GetCurrentUser();
+      var queryParameters = new DynamicParameters();
+      queryParameters.Add("@IdAsignacion", id);
+      queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
+      var result = await ExecuteReader<Asignacion_PlandePago>("SP_PlanPagoGenerar",queryParameters);
+      return result;
+    }
   }
 }

@@ -121,6 +121,13 @@
             <param name="idpago">key del pago</param>
             <returns>Datos de los meses a pagar</returns>
         </member>
+        <member name="M:Dapper.WebApi.Controllers.PagoController.GetTicket(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id">Id del Pago a Generar Ticket</param>
+            <returns></returns>
+        </member>
         <member name="M:Dapper.WebApi.Controllers.UbicacionController.GetUbicaciones">
             <summary>
             Lista los proyectos registrados con el detalle de Lotes
