@@ -59,5 +59,15 @@ namespace Dapper.Infrastructure.Repository
      var result = await ExecuteSP("SP_AsignacionAnular",queryParameters);
 
     }
+
+    public async Task<List<EstadoCuenta>> GenerarEstadoCuenta(int id)
+    {
+       string user = _userAccesor.GetCurrentUser();
+      var queryParameters = new DynamicParameters();
+      queryParameters.Add("@IdAsignacion", id);
+      queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
+      var result = await ExecuteReader<EstadoCuenta>("SP_EstadoCuentaGenerar",queryParameters);
+      return result;
+    }
   }
 }

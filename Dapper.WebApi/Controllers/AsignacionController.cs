@@ -83,5 +83,13 @@ namespace Dapper.WebApi.Controllers
       return new Response<string>("Anulada Correctamente",true);
     }
 
+    
+    [HttpGet("GetEstadoCuenta/{id}")]
+    public async Task<Response<EstadoCuenta>> GetEstadoCuenta(int id)
+    {
+      var result = await _repository.GenerarEstadoCuenta(id);
+      return new Response<EstadoCuenta>(result);
+    }
+
   }
 }

@@ -7,8 +7,9 @@ using Dapper.Core.Model;
 
 namespace Dapper.Application.Interfaces
 {
-    public interface IAsignacionesRepository : IGenericDapperRepository<Asignaciones>
-    {
-        public Task AnularAsignacion (AnularAsignacionRequest request);
-    }
+  public interface IAsignacionesRepository : IGenericDapperRepository<Asignaciones>
+  {
+    Task AnularAsignacion(AnularAsignacionRequest request);
+    Task<List<EstadoCuenta>> GenerarEstadoCuenta(int id);
+  }
 }
