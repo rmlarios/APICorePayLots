@@ -52,16 +52,19 @@ namespace Dapper.Infraestructure.Identity.Services
       {
         user = await _userManager.FindByNameAsync(request.Email);
         if (user == null)
-          throw new ApiException($"No Accounts Registered with {request.Email}.");
+          //throw new ApiException($"No Accounts Registered with {request.Email}.");
+          throw new ApiException($"Credenciales Incorrectas.");
       }
       var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
       if (!result.Succeeded)
       {
-        throw new ApiException($"Invalid Credentials for '{request.Email}'.");
+        //throw new ApiException($"Invalid Credentials for '{request.Email}'.");
+        throw new ApiException($"Credenciales Incorrectas.");
       }
       if (!user.EmailConfirmed)
       {
-        throw new ApiException($"Account Not Confirmed for '{request.Email}'.");
+        //throw new ApiException($"Account Not Confirmed for '{request.Email}'.");
+        throw new ApiException($"Credenciales Incorrectas.");
       }
       JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);
       AuthenticationResponse response = new AuthenticationResponse();
@@ -231,6 +234,19 @@ namespace Dapper.Infraestructure.Identity.Services
       {
         throw new ApiException($"Error occured while reseting the password.");
       }
+    }
+
+    public async Task<Response<List<ApplicationUser>>> GetAllUser()
+    {
+      var users = _userManager.Users.ToList();
+      return new Response<List<ApplicationUser>>(users);
+    }
+
+    public Task<Response<List<M>>> GetAllUser<M>() where M : class
+    {
+      var users = _userManager.Users.ToList();
+      return new Response<List<ApplicationUser>>(users);
+      //throw new NotImplementedException();
     }
   }
 }

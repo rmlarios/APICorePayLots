@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.Identity;
+using System;
 
-namespace Dapper.Infraestructure.Identity.Models
+namespace Dapper.Core.Model
 {
     public class ApplicationUser : IdentityUser
     {
+    
          public bool? IsActive { get; set; }        
+    
     }
 }
