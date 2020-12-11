@@ -30,6 +30,7 @@ namespace Dapper.Infraestructure.Identity.Services
         email.Sender = MailboxAddress.Parse(request.From ?? _mailSettings.EmailFrom);
         email.To.Add(MailboxAddress.Parse(request.To));
         email.Subject = request.Subject;
+        
         var builder = new BodyBuilder();
         builder.HtmlBody = request.Body;
         email.Body = builder.ToMessageBody();

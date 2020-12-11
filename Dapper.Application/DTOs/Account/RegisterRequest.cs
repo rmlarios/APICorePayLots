@@ -7,11 +7,11 @@ namespace Dapper.Application.DTOs.Account
 {
     public class RegisterRequest
     {
-        [Required]
+       /* [Required]
         public string FirstName { get; set; }
 
         [Required]
-        public string LastName { get; set; }
+        public string LastName { get; set; }*/
 
         [Required]
         [EmailAddress]
@@ -24,8 +24,10 @@ namespace Dapper.Application.DTOs.Account
         [MinLength(6)]
         public string Password { get; set; }
 
-        [Required]
+        
+
+        /* [Required]
         [Compare("Password")]
-        public string ConfirmPassword { get; set; }
+        public string ConfirmPassword { get; set; } */
     }
 }

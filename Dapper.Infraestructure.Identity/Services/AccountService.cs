@@ -12,13 +12,16 @@ using Dapper.Application.Exceptions;
 using Dapper.Application.Interfaces;
 using Dapper.Application.Interfaces.Account;
 using Dapper.Application.Wrappers;
+using Dapper.Core.Model;
 using Dapper.Core.Settings;
 using Dapper.Infraestructure.Identity.Helpers;
 using Dapper.Infraestructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Encodings.Web;
 
 namespace Dapper.Infraestructure.Identity.Services
 {
@@ -55,6 +58,11 @@ namespace Dapper.Infraestructure.Identity.Services
           //throw new ApiException($"No Accounts Registered with {request.Email}.");
           throw new ApiException($"Credenciales Incorrectas.");
       }
+
+      if (user.IsActive == false)
+      {
+        throw new ApiException($"Usuario Inválido.");
+      }
       var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
       if (!result.Succeeded)
       {
@@ -80,31 +88,36 @@ namespace Dapper.Infraestructure.Identity.Services
       return new Response<AuthenticationResponse>(response, $"Authenticated {user.UserName}");
     }
 
-    public async Task<Response<string>> RegisterAsync(RegisterRequest request, string origin)
+    public async Task<Response<ApplicationUserModel>> RegisterAsync(ApplicationUserModel request, string origin)
     {
       var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
       if (userWithSameUserName != null)
       {
-        throw new ApiException($"Usuario '{request.UserName}' ya está en uso.");
+        throw new ApiException($"Nombre de Usuario '{request.UserName}' ya está en uso.");
       }
       var user = new ApplicationUser
       {
         Email = request.Email,
+        IsActive = request.IsActive,
         //FirstName = request.FirstName,
         //LastName = request.LastName,
         UserName = request.UserName
       };
+      request.Password = "Tempo@123";
       var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
       if (userWithSameEmail == null)
       {
         var result = await _userManager.CreateAsync(user, request.Password);
         if (result.Succeeded)
         {
-          //await _userManager.AddToRoleAsync(user, Roles.Basic.ToString());
+          //await _userManager.AddToRoleAsync(user, "Administrador");
+          await AddUserToRoleAsync(user, "Operador");
           var verificationUri = await SendVerificationEmail(user, origin);
+          Uri url = new Uri(verificationUri);
           //TODO: Attach Email Service here and configure it via appsettings
-          await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "mail@codewithmukesh.com", To = user.Email, Body = $"Favor confirmar su cuenta accediendo a la URL {verificationUri}", Subject = "Confirmar Registro." });
-          return new Response<string>(user.Id, message: $"Usuario Registrado. Favor confirmar su cuenta accediendo a la URL {verificationUri}");
+          string Msg = $"Active su cuenta <a href='http://" + HtmlEncoder.Default.Encode(url.AbsoluteUri) + "'>haciendo click aqui</a>.";
+          await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "mail@codewithmukesh.com", To = user.Email, Body = Msg, Subject = "Confirmar Registro." });
+          return new Response<ApplicationUserModel>(request, message: $"Usuario Registrado. Debe confirmar su cuenta accediendo antes de poder loguearse");
         }
         else
         {
@@ -168,7 +181,7 @@ namespace Dapper.Infraestructure.Identity.Services
     {
       var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
       code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-      var route = "api/account/confirm-email/";
+      var route = "identity/account/confirmemail/";
       var _enpointUri = new Uri(string.Concat($"{origin}/", route));
       var verificationUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "userId", user.Id);
       verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
@@ -236,17 +249,95 @@ namespace Dapper.Infraestructure.Identity.Services
       }
     }
 
-    public async Task<Response<List<ApplicationUser>>> GetAllUser()
+    public async Task<Response<ApplicationUserModel>> GetAllUser()
     {
-      var users = _userManager.Users.ToList();
-      return new Response<List<ApplicationUser>>(users);
+      var users = await _userManager.Users.ToListAsync();
+      List<ApplicationUserModel> models = new List<ApplicationUserModel>();
+      ApplicationUserModel model = new ApplicationUserModel();
+      foreach (var u in users)
+      {
+        model = new ApplicationUserModel();
+        model.UserName = u.UserName;
+        model.Email = u.Email;
+        model.IsActive = u.IsActive;
+        model.EmailConfirmed = u.EmailConfirmed;
+        var roles = await _userManager.GetRolesAsync(u);
+        if (roles.Count != 0)
+          model.Rol = roles.ToList()[0];
+
+        models.Add(model);
+      }
+      /*.Select(u => new ApplicationUserModel
+      {
+        Id = u.Id,
+        UserName = u.UserName,
+        Email = u.Email,
+        IsActive = u.IsActive,
+        EmailConfirmed = u.EmailConfirmed,
+        Rol = _roleManager.roles
+      }
+    ).ToListAsync();*/
+
+      // List<ApplicationUserModel> users_ = users;
+      return new Response<ApplicationUserModel>(models);
+      //throw new NotImplementedException();
+    }
+    public async Task<Response<ApplicationUserModel>> UpdateUser(string userId, ApplicationUserModel request)
+    {
+      var user = await _userManager.FindByEmailAsync(request.Email);
+      if (user == null)
+      {
+        user = await _userManager.FindByNameAsync(request.Email);
+        if (user == null)
+          //throw new ApiException($"No Accounts Registered with {request.Email}.");
+          throw new ApiException($"Usuario no Existe.");
+      }
+      user.UserName = request.UserName;
+      user.Email = request.Email;
+      user.IsActive = request.IsActive;
+      await _userManager.UpdateAsync(user);
+
+      return new Response<ApplicationUserModel>(request);
+    }
+    public async Task<ApplicationUserModel> GetByIdAsync(string id)
+    {
+      var user = await _userManager.FindByIdAsync(id);
+      if (user == null)
+        throw new ApiException("Registro no encontrado");
+      return new ApplicationUserModel()
+      {
+        UserName = user.UserName,
+        Email = user.Email,
+        IsActive = user.IsActive
+      };
+
     }
 
-    public Task<Response<List<M>>> GetAllUser<M>() where M : class
+    public async Task AddUserToRoleAsync(ApplicationUser user, string roleName)
     {
-      var users = _userManager.Users.ToList();
-      return new Response<List<ApplicationUser>>(users);
-      //throw new NotImplementedException();
+      await CheckRoleAsync(roleName);
+      await _userManager.AddToRoleAsync(user, roleName);
+    }
+
+    public async Task CheckRoleAsync(string roleName)
+    {
+      var roleExists = await _roleManager.RoleExistsAsync(roleName);
+      if (!roleExists)
+      {
+        await _roleManager.CreateAsync(new IdentityRole
+        {
+          Name = roleName
+        });
+      }
+    }
+    public async Task<IList<string>> GetUserRol(ApplicationUser user)
+    {
+      return await _userManager.GetRolesAsync(user);
+    }
+
+    public async Task<List<string>> GetRoles()
+    {
+      return await _roleManager.Roles.Select(m=>m.Name).ToListAsync();
     }
   }
 }

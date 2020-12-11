@@ -36,10 +36,10 @@ namespace Dapper.Infraestructure.Identity
                         options.Password.RequireUppercase = true;
                         options.Password.RequireLowercase = true;
                         options.User.RequireUniqueEmail = true;
-                        options.SignIn.RequireConfirmedEmail = false;
+                        options.SignIn.RequireConfirmedEmail = true;
                         options.Lockout.MaxFailedAccessAttempts = 5;
             })
-            .AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<IdentityContext>().AddRoles<IdentityRole>().AddDefaultTokenProviders();
             
             /* services.AddAuthorization(options =>{
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()

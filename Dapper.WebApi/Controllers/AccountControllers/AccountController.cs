@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Dapper.Application.DTOs.Account;
 using Dapper.Application.Interfaces.Account;
 using Dapper.Application.Wrappers;
+using Dapper.Core.Model;
 using Dapper.Infraestructure.Identity.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,8 +27,8 @@ namespace Dapper.WebApi.Controllers.AccountControllers
     {
       return await _accountService.AuthenticateAsync(request, GenerateIPAddress());
     }
-    [HttpPost("register")]
-    public async Task<Response<string>> RegisterAsync(RegisterRequest request)
+    [HttpPost("Create")]
+    public async Task<Response<ApplicationUserModel>> RegisterAsync(ApplicationUserModel request)
     {
       var origin = Request.Headers["origin"];
       return await _accountService.RegisterAsync(request, origin);
@@ -38,11 +39,26 @@ namespace Dapper.WebApi.Controllers.AccountControllers
       var origin = Request.Headers["origin"];
       return Ok(await _accountService.ConfirmEmailAsync(userId, code));
     }
-   /*  [HttpGet("getallusers")]
-    public async Task<Response<List<ApplicationUser>>> GetAllUsers()
+    [HttpGet("getallusers")]
+    public async Task<Response<ApplicationUserModel>> GetAllUsers()
     {
       return await _accountService.GetAllUser();
-    } */
+    }
+    [HttpGet("{id}")]
+    public async Task<Response<ApplicationUserModel>> GetbyId(string id)
+    {
+        return new Response<ApplicationUserModel>(await _accountService.GetByIdAsync(id));
+    }
+    [HttpPut("{id}")]
+    public async Task<Response<ApplicationUserModel>> UpdateAsync(string id,ApplicationUserModel request)
+    {
+      return await _accountService.UpdateUser(id, request);
+    }
+    [HttpGet("GetRoles")]
+    public async Task<Response<string>> GetRoles()
+    {
+      return new Response<string>(await _accountService.GetRoles());
+    }
 
 
 
