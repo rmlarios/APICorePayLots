@@ -18,5 +18,6 @@ namespace Dapper.Application.Interfaces.Account
     Task<Response<ApplicationUserModel>> UpdateUser(string userId, ApplicationUserModel request);
     Task<ApplicationUserModel> GetByIdAsync(string id);
     Task<List<string>> GetRoles();
+    Task<Response<ChangePasswordRequest>> ChangePassword(ChangePasswordRequest request);
   }
 }

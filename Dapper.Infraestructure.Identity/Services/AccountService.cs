@@ -48,6 +48,19 @@ namespace Dapper.Infraestructure.Identity.Services
       this._emailService = emailService;
     }
 
+    public async Task<Response<ApplicationUser>> GetUser(string UserName)
+    {
+      var user = await _userManager.FindByEmailAsync(UserName);
+      if (user == null)
+      {
+        user = await _userManager.FindByNameAsync(UserName);
+        if (user == null)
+          //throw new ApiException($"No Accounts Registered with {request.Email}.");
+          throw new ApiException($"Credenciales Incorrectas.");
+      }
+      return new Response<ApplicationUser>(user);
+    }
+
     public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
     {
       var user = await _userManager.FindByEmailAsync(request.Email);
@@ -111,7 +124,7 @@ namespace Dapper.Infraestructure.Identity.Services
         if (result.Succeeded)
         {
           //await _userManager.AddToRoleAsync(user, "Administrador");
-          await AddUserToRoleAsync(user, "Operador");
+          await AddUserToRoleAsync(user, request.Rol);
           var verificationUri = await SendVerificationEmail(user, origin);
           Uri url = new Uri(verificationUri);
           //TODO: Attach Email Service here and configure it via appsettings
@@ -313,6 +326,22 @@ namespace Dapper.Infraestructure.Identity.Services
 
     }
 
+public async Task<Response<ChangePasswordRequest>> ChangePassword(ChangePasswordRequest request)
+{
+    var account = await _userManager.FindByEmailAsync(request.UserName);
+    if(account==null)
+        account = await _userManager.FindByNameAsync(request.UserName);
+      if (account == null) throw new ApiException($"Datos Incorrectos.");
+      var result = await _userManager.ChangePasswordAsync(account, request.currentpsw, request.newpsw);
+      if (result.Succeeded)
+      {
+        return new Response<ChangePasswordRequest>(request, message: $"Contraseña Cambiada Correctamente.");
+      }
+      else
+      {
+        throw new ApiException($"Error al tratar de cambiar la contraseña.");
+      } 
+}
     public async Task AddUserToRoleAsync(ApplicationUser user, string roleName)
     {
       await CheckRoleAsync(roleName);
@@ -334,7 +363,6 @@ namespace Dapper.Infraestructure.Identity.Services
     {
       return await _userManager.GetRolesAsync(user);
     }
-
     public async Task<List<string>> GetRoles()
     {
       return await _roleManager.Roles.Select(m=>m.Name).ToListAsync();

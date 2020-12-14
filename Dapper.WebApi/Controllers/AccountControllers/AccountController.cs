@@ -59,6 +59,11 @@ namespace Dapper.WebApi.Controllers.AccountControllers
     {
       return new Response<string>(await _accountService.GetRoles());
     }
+    [HttpPost("ChangePassword")]
+    public async Task<Response<ChangePasswordRequest>> ChangePasswordAsync(ChangePasswordRequest request)
+    {
+      return await _accountService.ChangePassword(request);
+    }
 
 
 
