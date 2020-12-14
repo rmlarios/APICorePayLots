@@ -312,9 +312,9 @@ namespace Dapper.Infrastructure.Contexts
 
             modelBuilder.Entity<DatosEmpresa>(entity =>
             {
-                entity.HasNoKey();
-
-                entity.Property(e => e.DatosEmpresaId).ValueGeneratedOnAdd();
+              //entity.HasNoKey();
+              entity.HasKey(m=>m.DatosEmpresaId);
+              entity.Property(e => e.DatosEmpresaId).ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<ErrorSql>(entity =>

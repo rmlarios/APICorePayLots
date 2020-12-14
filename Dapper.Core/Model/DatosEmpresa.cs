@@ -7,6 +7,7 @@ namespace Dapper.Core.Model
 {
     public partial class DatosEmpresa
     {
+        [Key]
         public int DatosEmpresaId { get; set; }
         public string NombreEmpresa { get; set; }
         public string Direccion { get; set; }
