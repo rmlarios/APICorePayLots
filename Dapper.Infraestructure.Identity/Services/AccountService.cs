@@ -228,9 +228,9 @@ namespace Dapper.Infraestructure.Identity.Services
       };
     }
 
-    public async Task ForgotPassword(ForgotPasswordRequest model, string origin)
+    public async Task ForgotPassword(string email, string origin)
     {
-      var account = await _userManager.FindByEmailAsync(model.Email);
+      var account = await _userManager.FindByEmailAsync(email);
 
       // always return ok response to prevent email enumeration
       if (account == null) return;
@@ -240,16 +240,16 @@ namespace Dapper.Infraestructure.Identity.Services
       var _enpointUri = new Uri(string.Concat($"{origin}/", route));
       var emailRequest = new EmailRequest()
       {
-        Body = $"You reset token is - {code}",
-        To = model.Email,
-        Subject = "Reset Password",
+        Body = $"Su código de verificación es - {code}",
+        To = email,
+        Subject = "Cambiar contraseña.",
       };
       await _emailService.SendAsync(emailRequest);
     }
 
     public async Task<Response<string>> ResetPassword(ResetPasswordRequest model)
     {
-      var account = await _userManager.FindByEmailAsync(model.Email);
+      var account = await _userManager.FindByEmailAsync(model.Email);      
       if (account == null) throw new ApiException($"No Accounts Registered with {model.Email}.");
       var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password);
       if (result.Succeeded)
