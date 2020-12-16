@@ -247,14 +247,14 @@ namespace Dapper.Infraestructure.Identity.Services
       await _emailService.SendAsync(emailRequest);
     }
 
-    public async Task<Response<string>> ResetPassword(ResetPasswordRequest model)
+    public async Task<Response<ResetPasswordRequest>> ResetPassword(ResetPasswordRequest model)
     {
       var account = await _userManager.FindByEmailAsync(model.Email);      
       if (account == null) throw new ApiException($"No Accounts Registered with {model.Email}.");
       var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password);
       if (result.Succeeded)
       {
-        return new Response<string>(model.Email, message: $"Password Resetted.");
+        return new Response<ResetPasswordRequest>(model, message: $"Contraseña Restablecida.");
       }
       else
       {

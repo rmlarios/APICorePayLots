@@ -71,6 +71,11 @@ namespace Dapper.WebApi.Controllers.AccountControllers
       await _accountService.ForgotPassword(request.Email, origin);
       return new Response<ForgotPasswordRequest>("Correo Enviado",true);
     }
+    [HttpPost("ResetPassword")]
+    public async Task<Response<ResetPasswordRequest>> ResetPassword(ResetPasswordRequest request)
+    {
+      return await _accountService.ResetPassword(request);
+    }
 
 
 

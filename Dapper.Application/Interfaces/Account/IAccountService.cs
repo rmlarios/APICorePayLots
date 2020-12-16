@@ -13,7 +13,7 @@ namespace Dapper.Application.Interfaces.Account
     Task<Response<ApplicationUserModel>> RegisterAsync(ApplicationUserModel request, string origin);
     Task<Response<string>> ConfirmEmailAsync(string userId, string code);
     Task ForgotPassword(string email, string origin);
-    Task<Response<string>> ResetPassword(ResetPasswordRequest model);
+    Task<Response<ResetPasswordRequest>> ResetPassword(ResetPasswordRequest model);
     Task<Response<ApplicationUserModel>> GetAllUser();
     Task<Response<ApplicationUserModel>> UpdateUser(string userId, ApplicationUserModel request);
     Task<ApplicationUserModel> GetByIdAsync(string id);
