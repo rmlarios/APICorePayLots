@@ -94,6 +94,8 @@ namespace Dapper.Infraestructure.Identity.Services
       response.Email = user.Email;
       response.UserName = user.UserName;
       var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+      if(rolesList.Count==0)
+        throw new ApiException($"Usuario no pertenece a ningún grupo.");
       response.Roles = rolesList.ToList();
       response.IsVerified = user.EmailConfirmed;
       var refreshToken = GenerateRefreshToken(ipAddress);
@@ -234,6 +236,8 @@ namespace Dapper.Infraestructure.Identity.Services
 
       // always return ok response to prevent email enumeration
       if (account == null) return;
+      if(!account.EmailConfirmed) return;
+      if(!account.IsActive) return;
 
       var code = await _userManager.GeneratePasswordResetTokenAsync(account);
       var route = "api/account/reset-password/";

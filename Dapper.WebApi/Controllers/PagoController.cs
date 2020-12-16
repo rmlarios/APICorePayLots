@@ -111,6 +111,13 @@ namespace Dapper.WebApi.Controllers
       return new Response<TicketPago>(result);
     }
 
+    [HttpGet("GetGrafico")]
+    public async Task<Response<ViewGraficoPagos>> GetGrafico(string fechapago)
+    {
+      var result = await _repository.GetGraficoPagosAsync(fechapago);
+      return new Response<ViewGraficoPagos>(result);
+    }
+
 
 
   }

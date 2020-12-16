@@ -65,11 +65,19 @@ namespace Dapper.Infrastructure.Repository
 
     public async Task<List<Asignacion_PlandePago>> GenerarPlanPago(int id)
     {
-       string user = _userAccesor.GetCurrentUser();
+      string user = _userAccesor.GetCurrentUser();
       var queryParameters = new DynamicParameters();
       queryParameters.Add("@IdAsignacion", id);
       queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
       var result = await ExecuteReader<Asignacion_PlandePago>("SP_PlanPagoGenerar",queryParameters);
+      return result;
+    }
+
+    public async Task<List<ViewGraficoPagos>> GetGraficoPagosAsync(string FiltroFechaGrafico)
+    {
+      string query = "select NombreProyecto + ' ' +Fecha as NombreProyecto,sum(Pagado) as Pagado from View_GraficoPagos where Fecha in('" + FiltroFechaGrafico + "') group by NombreProyecto + ' ' +Fecha";
+      //query = "select NombreProyecto,sum(Pagado) as Pagado from View_GraficoPagos group by NombreProyecto";
+      var result = await ExecuteReader<ViewGraficoPagos>(query, new DynamicParameters(), CommandType.Text);
       return result;
     }
   }
