@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Dapper.Application.Interfaces;
 using Dapper.Application.Wrappers;
@@ -18,7 +19,19 @@ namespace Dapper.WebApi.Controllers
     public ProformaController(IProformaRepository repository) : base(repository)
     {
       _repository = repository;
-    }    
+    }
+
+    /// <summary>
+    /// Obtiene los datos de una proforma
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("GetProforma/{id}")]
+    public async Task<Response<Proformas>> GetProforma(int id)
+    {
+      var result = await _repository.GenerarProforma(id);
+      return new Response<Proformas>(result);
+    }     
 
   }
 }

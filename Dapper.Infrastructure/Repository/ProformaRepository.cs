@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Dapper.Application.Interfaces;
@@ -39,5 +40,11 @@ namespace Dapper.Infrastructure.Repository
       var result = await ExecuteSP("SP_ProformaCrearActualizar", queryParameters);
       if (result != null) return (int)result; else return 0;
     }
+  
+  public async Task<List<Proformas>> GenerarProforma(int id)
+    {      
+      var result = await ExecuteReader<Proformas>("SELECT * FROM Proformas Where IdProforma=" + id,new DynamicParameters(),CommandType.Text);
+      return result;
+    }    
   }
 }

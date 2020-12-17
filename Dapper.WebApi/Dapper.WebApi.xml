@@ -128,6 +128,13 @@
             <param name="id">Id del Pago a Generar Ticket</param>
             <returns></returns>
         </member>
+        <member name="M:Dapper.WebApi.Controllers.ProformaController.GetProforma(System.Int32)">
+            <summary>
+            Obtiene los datos de una proforma
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:Dapper.WebApi.Controllers.UbicacionController.GetUbicaciones">
             <summary>
             Lista los proyectos registrados con el detalle de Lotes
