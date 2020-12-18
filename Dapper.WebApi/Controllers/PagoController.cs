@@ -118,6 +118,13 @@ namespace Dapper.WebApi.Controllers
       return new Response<ViewGraficoPagos>(result);
     }
 
+    [HttpGet("GetMorosos")]
+    public async Task<Response<ViewReporteMorosos>> GetMorosos()
+    {
+      //var result = ;
+      return new Response<ViewReporteMorosos>(await _repository.FindAsync<ViewReporteMorosos>(m => m.CuotasRequeridas > m.Cuotas));
+    }
+
 
 
   }
