@@ -83,6 +83,19 @@ namespace Dapper.WebApi.Controllers
       return new Response<string>("Anulada Correctamente",true);
     }
 
+    //POST api/asignacion/Activar/5
+    /// <summary>
+    /// Activa una Asignacion que ha sido Anulada
+    /// </summary>
+    /// <param name="request">Key de la Asignacion a activar</param>
+    /// <returns>Mensaje de confirmacion</returns>
+    [HttpPost("Activar")]
+    public async Task<Response<string>> PostAnular (string IdAsignacion)
+    {
+      await _repository.ActivarAsignacion(IdAsignacion);
+      return new Response<string>("Activada Correctamente",true);
+    }
+
     
     [HttpGet("GetEstadoCuenta/{id}")]
     public async Task<Response<EstadoCuenta>> GetEstadoCuenta(int id)

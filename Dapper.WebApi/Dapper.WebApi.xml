@@ -31,6 +31,13 @@
             <param name="request">Key de la Asignacion a anular y Motivo de Anulación</param>
             <returns>Mensaje de confirmacion</returns>
         </member>
+        <member name="M:Dapper.WebApi.Controllers.AsignacionController.PostAnular(System.String)">
+            <summary>
+            Activa una Asignacion que ha sido Anulada
+            </summary>
+            <param name="request">Key de la Asignacion a activar</param>
+            <returns>Mensaje de confirmacion</returns>
+        </member>
         <member name="M:Dapper.WebApi.Controllers.BaseController`1.GetAll">
             <summary>
             Lista todos los registros de la entidad
