@@ -7,10 +7,11 @@ using Dapper.Core.Model;
 
 namespace Dapper.Application.Interfaces
 {
+  
   public interface IAsignacionesRepository : IGenericDapperRepository<Asignaciones>
   {
     Task AnularAsignacion(AnularAsignacionRequest request);
-    Task<List<EstadoCuenta>> GenerarEstadoCuenta(int id);
-    Task ActivarAsignacion(string IdAsignacion);
+    Task<List<EstadoCuenta>> GenerarEstadoCuenta(int id);    
+    Task ActivarAsignacion(ActivarRequest request);
   }
 }

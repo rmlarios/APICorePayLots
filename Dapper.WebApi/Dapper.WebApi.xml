@@ -31,7 +31,7 @@
             <param name="request">Key de la Asignacion a anular y Motivo de Anulación</param>
             <returns>Mensaje de confirmacion</returns>
         </member>
-        <member name="M:Dapper.WebApi.Controllers.AsignacionController.PostAnular(System.String)">
+        <member name="M:Dapper.WebApi.Controllers.AsignacionController.PostActivar(Dapper.Application.DTOs.RequestModels.ActivarRequest)">
             <summary>
             Activa una Asignacion que ha sido Anulada
             </summary>

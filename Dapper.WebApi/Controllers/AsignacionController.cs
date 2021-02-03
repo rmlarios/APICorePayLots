@@ -90,9 +90,9 @@ namespace Dapper.WebApi.Controllers
     /// <param name="request">Key de la Asignacion a activar</param>
     /// <returns>Mensaje de confirmacion</returns>
     [HttpPost("Activar")]
-    public async Task<Response<string>> PostAnular (string IdAsignacion)
+    public async Task<Response<string>> PostActivar (ActivarRequest request)
     {
-      await _repository.ActivarAsignacion(IdAsignacion);
+      await _repository.ActivarAsignacion(request);
       return new Response<string>("Activada Correctamente",true);
     }
 
