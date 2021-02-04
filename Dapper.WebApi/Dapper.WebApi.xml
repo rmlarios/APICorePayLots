@@ -90,6 +90,13 @@
             <param name="id">Id del proyecto a filtrar</param>
             <returns>Lista de Bloques filtrados</returns>
         </member>
+        <member name="M:Dapper.WebApi.Controllers.DashBoardController.GetSeguimientos">
+            GET api/GetbyUbicaciones
+            <summary>
+            Obtiene los Lotes registrados y su estado actual
+            </summary>    
+            <returns>Lista de Bloques filtrados</returns>
+        </member>
         <member name="M:Dapper.WebApi.Controllers.LoteController.GetLotes">
             GET api/GetbyUbicaciones
             <summary>

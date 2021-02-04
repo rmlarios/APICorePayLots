@@ -75,10 +75,19 @@ namespace Dapper.Infrastructure.Repository
 
     public async Task<List<ViewGraficoPagos>> GetGraficoPagosAsync(string FiltroFechaGrafico)
     {
-      string query = "select NombreProyecto + ' ' +Fecha as NombreProyecto,sum(Pagado) as Pagado from View_GraficoPagos where Fecha in('" + FiltroFechaGrafico + "') group by NombreProyecto + ' ' +Fecha";
-      //query = "select NombreProyecto,sum(Pagado) as Pagado from View_GraficoPagos group by NombreProyecto";
+      string query = "";
+      if (FiltroFechaGrafico != null)
+      {
+        query = "select NombreProyecto + ' ' +Fecha as NombreProyecto,sum(Pagado) as Pagado from View_GraficoPagos where Fecha in('" + FiltroFechaGrafico + "') group by NombreProyecto + ' ' +Fecha";
+        //query = "select NombreProyecto,sum(Pagado) as Pagado from View_GraficoPagos group by NombreProyecto";        
+      }
+      else
+      {
+        query = "SELECT [NombreProyecto], SUM([Pagado]) Pagado FROM [View_GraficoPagos] GROUP BY NombreProyecto";        
+      }
       var result = await ExecuteReader<ViewGraficoPagos>(query, new DynamicParameters(), CommandType.Text);
       return result;
+      
     }
   }
 }

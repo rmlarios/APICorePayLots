@@ -61,6 +61,7 @@ namespace Dapper.Infrastructure.Contexts
         public virtual DbSet<ViewConsolidadoBloques> ViewConsolidadoBloques { get; set; }
         public virtual DbSet<ViewConsolidadoUbicaciones> ViewConsolidadoUbicaciones { get; set; }
         public virtual DbSet<ViewDashboard1> ViewDashboard1 { get; set; }
+        public virtual DbSet<ViewDashBoard> ViewDashboard { get; set; }
         public virtual DbSet<ViewDepartamentosMunicipios> ViewDepartamentosMunicipios { get; set; }
         public virtual DbSet<ViewGraficoPagos> ViewGraficoPagos { get; set; }
         public virtual DbSet<ViewLotes> ViewLotes { get; set; }
@@ -402,6 +403,14 @@ namespace Dapper.Infrastructure.Contexts
 
                 entity.ToView("View_Dashboard_1");
             });
+
+             modelBuilder.Entity<ViewDashBoard>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("View_Dashboard");
+            });
+
 
             modelBuilder.Entity<ViewDepartamentosMunicipios>(entity =>
             {
