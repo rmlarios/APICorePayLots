@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Threading.Tasks;
+using Dapper.Application.DTOs.RequestModels;
 using Dapper.Application.Interfaces;
 using Dapper.Application.Interfaces.Account;
 using Dapper.Core.Model;
@@ -35,6 +36,16 @@ namespace Dapper.Infrastructure.Repository
       var result = await ExecuteSP("SP_DatosEmpresaCrearActualizar", queryParameters);
       if (result != null) return (int)result; else return 0;
 
+    }
+
+    public async Task<string> BackupAsync(RespaldoRequest request)
+    {
+      string user = _userAccesor.GetCurrentUser();
+      var queryParameters = new DynamicParameters();
+      queryParameters.Add("@Path", request.Path);
+      queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
+      var result = await ExecuteSP("BK", queryParameters);
+      if(result!=null) return result.ToString(); else return "Error al crear respaldo";
     }  
   }
 }
