@@ -44,7 +44,8 @@ namespace Dapper.Infrastructure.Contexts
         public virtual DbSet<ControlAccesoUsuarios> ControlAccesoUsuarios { get; set; }
         public virtual DbSet<DatosEmpresa> DatosEmpresa { get; set; }
         public virtual DbSet<ErrorSql> ErrorSql { get; set; }
-        public virtual DbSet<ErroresSistema> ErroresSistema { get; set; }
+        public virtual DbSet<AbonosPrima> AbonosPrima{ get; set; }
+    public virtual DbSet<ErroresSistema> ErroresSistema { get; set; }
         //public virtual DbSet<Importacion> Importacion { get; set; }
         //public virtual DbSet<Importacion2> Importacion2 { get; set; }
         //public virtual DbSet<Importacion3> Importacion3 { get; set; }
@@ -62,7 +63,8 @@ namespace Dapper.Infrastructure.Contexts
         public virtual DbSet<ViewConsolidadoUbicaciones> ViewConsolidadoUbicaciones { get; set; }
         public virtual DbSet<ViewDashboard1> ViewDashboard1 { get; set; }
         public virtual DbSet<ViewDashBoard> ViewDashboard { get; set; }
-        public virtual DbSet<ViewDepartamentosMunicipios> ViewDepartamentosMunicipios { get; set; }
+        public virtual DbSet<ViewAbonosPrima> ViewAbonosPrima { get; set; }
+    public virtual DbSet<ViewDepartamentosMunicipios> ViewDepartamentosMunicipios { get; set; }
         public virtual DbSet<ViewGraficoPagos> ViewGraficoPagos { get; set; }
         public virtual DbSet<ViewLotes> ViewLotes { get; set; }
         public virtual DbSet<ViewPagosAsignaciones> ViewPagosAsignaciones { get; set; }
@@ -323,6 +325,12 @@ namespace Dapper.Infrastructure.Contexts
                 entity.Property(e => e.Fecha).HasDefaultValueSql("(getdate())");
             });
 
+             modelBuilder.Entity<AbonosPrima>(entity =>
+            {
+              entity.HasKey(m => m.IdAbonoPrima);
+              //entity.Property(e => e.Fecha).HasDefaultValueSql("(getdate())");
+            });
+
             /*modelBuilder.Entity<Importacion>(entity =>
             {
                 entity.HasNoKey();
@@ -409,6 +417,13 @@ namespace Dapper.Infrastructure.Contexts
                 entity.HasNoKey();
 
                 entity.ToView("View_Dashboard");
+            });
+
+               modelBuilder.Entity<ViewAbonosPrima>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("View_Abonos_Prima");
             });
 
 

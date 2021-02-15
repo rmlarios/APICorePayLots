@@ -28,7 +28,8 @@ namespace Dapper.Core.Model
         public decimal? Saldo { get; set; }
         public int IdBeneficiario { get; set; }
         public bool? AplicaInteres { get; set; }
-        public string Observaciones { get; set; }
+        public bool? PrimaCancelada { get; set; }
+    public string Observaciones { get; set; }
         [Column(TypeName = "numeric(18, 2)")]
         public decimal Prima { get; set; }
         [Required]

@@ -15,11 +15,16 @@ namespace Dapper.Infrastructure
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
       //DBContext
-      services.AddDbContext<PayLotsDBContext>(options => options.UseSqlServer(configuration.GetConnectionString("PayLotsConnectionString")));
+      services.AddDbContext<PayLotsDBContext>(options => 
+     
+      options.UseSqlServer(configuration.GetConnectionString("PayLotsConnectionString"),sqlServerOptions=> sqlServerOptions.CommandTimeout(60))
+     
+      );
 
       //services.AddTransient<IBeneficiarioRepository,BeneficiarioRepository>();
 
       services.AddScoped(typeof(IGenericDapperRepository<>), typeof(GenericDapperRepository<>));
+      
       services.AddScoped<IBeneficiarioRepository, BeneficiarioRepository>();
       services.AddScoped<IAsignacionesRepository, AsignacionesRepository>();
       services.AddTransient<IUbicacionRepository, UbicacionRepository>();
@@ -29,6 +34,7 @@ namespace Dapper.Infrastructure
       services.AddTransient<IProformaRepository, ProformaRepository>();
       services.AddTransient<IPagoRepository, PagoRepository>();
       services.AddTransient<IDatosEmpresaRepository, DatosEmpresaRepository>();
+      services.AddTransient<IAbonosPrimaRepository, AbonosPrimaRepository>();
     }
   }
 }

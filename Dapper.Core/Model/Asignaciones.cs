@@ -33,7 +33,8 @@ namespace Dapper.Core.Model
         [Column(TypeName = "numeric(18, 2)")]
         public decimal? TasaInteres { get; set; }
         public bool? AplicaMora { get; set; }
-        public int? Plazo { get; set; }
+        public bool? PrimaCancelada { get; set; }
+    public int? Plazo { get; set; }
         public string Observaciones { get; set; }
         [Required]
         [Column("UAR")]

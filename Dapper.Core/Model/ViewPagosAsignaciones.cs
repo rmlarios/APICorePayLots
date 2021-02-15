@@ -49,5 +49,6 @@ namespace Dapper.Core.Model
         public decimal? TasaCambio { get; set; }
         [Column(TypeName = "numeric(18, 2)")]
         public decimal? MontoEfectivo { get; set; }
+         public bool? PrimaCancelada { get; set; }
     }
 }

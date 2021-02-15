@@ -26,6 +26,7 @@ namespace Dapper.Core.Model
         public string CedulaIdentidad { get; set; }
         public string NombreProyecto { get; set; }
         public bool? AplicaInteres { get; set; }
+        public bool? PrimaCancelada { get; set; }
         public string Observaciones { get; set; }
         [Column(TypeName = "numeric(18, 2)")]
         public decimal Prima { get; set; }
