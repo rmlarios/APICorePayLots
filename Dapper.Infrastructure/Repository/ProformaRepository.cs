@@ -31,7 +31,7 @@ namespace Dapper.Infrastructure.Repository
       queryParameters.Add("@Lote", proforma.Lote);
       queryParameters.Add("@Area", proforma.Area);
       queryParameters.Add("@PrecioVara", proforma.PrecioVara);
-      queryParameters.Add("@Prima", proforma.Interes);
+      queryParameters.Add("@Prima", proforma.Prima);
       queryParameters.Add("@Interes", proforma.Interes);
       queryParameters.Add("@Plazo", proforma.Plazo);
       queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
