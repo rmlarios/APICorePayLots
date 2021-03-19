@@ -12,5 +12,6 @@ namespace Dapper.Application.Interfaces
     Task<List<Asignacion_PlandePago>> GenerarPlanPago(int id);
     Task<List<TicketPago>> GenerarTicket(int id);
     Task<List<ViewGraficoPagos>> GetGraficoPagosAsync(string FiltroFechaGrafico);
+    Task<List<ViewPagosAsignaciones>> GetPagosFechasAsync(PagosFechasRequest request);
   }
 }

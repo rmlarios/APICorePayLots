@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper.Application.DTOs.RequestModels;
 using Dapper.Application.Interfaces;
@@ -14,13 +15,13 @@ namespace Dapper.Infrastructure.Repository
   public class PagoRepository : GenericDapperRepository<Pagos>, IPagoRepository
   {
     private readonly IUserAccesor _userAccesor;
-    public PagoRepository(IConfiguration configuration, PayLotsDBContext context,IUserAccesor userAccesor) : base(configuration, context)
+    public PagoRepository(IConfiguration configuration, PayLotsDBContext context, IUserAccesor userAccesor) : base(configuration, context)
     {
-        _userAccesor = userAccesor;
+      _userAccesor = userAccesor;
     }
 
-    public override async Task<int> AddUpdateAsync(int id,Pagos pago)
-    {       
+    public override async Task<int> AddUpdateAsync(int id, Pagos pago)
+    {
       string user = _userAccesor.GetCurrentUser();
       var queryParameters = new DynamicParameters();
       queryParameters.Add("@IdPago", id, dbType: DbType.Int32);
@@ -59,7 +60,7 @@ namespace Dapper.Infrastructure.Repository
       var queryParameters = new DynamicParameters();
       queryParameters.Add("@IdPago", id);
       queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
-      var result = await ExecuteReader<TicketPago>("SP_TicketPagoGenerar",queryParameters);
+      var result = await ExecuteReader<TicketPago>("SP_TicketPagoGenerar", queryParameters);
       return result;
     }
 
@@ -69,7 +70,7 @@ namespace Dapper.Infrastructure.Repository
       var queryParameters = new DynamicParameters();
       queryParameters.Add("@IdAsignacion", id);
       queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
-      var result = await ExecuteReader<Asignacion_PlandePago>("SP_PlanPagoGenerar",queryParameters);
+      var result = await ExecuteReader<Asignacion_PlandePago>("SP_PlanPagoGenerar", queryParameters);
       return result;
     }
 
@@ -83,11 +84,36 @@ namespace Dapper.Infrastructure.Repository
       }
       else
       {
-        query = "SELECT [NombreProyecto], SUM([Pagado]) Pagado FROM [View_GraficoPagos] GROUP BY NombreProyecto";        
+        query = "SELECT [NombreProyecto], SUM([Pagado]) Pagado FROM [View_GraficoPagos] GROUP BY NombreProyecto";
       }
       var result = await ExecuteReader<ViewGraficoPagos>(query, new DynamicParameters(), CommandType.Text);
       return result;
+
+    }
+
+    public async Task<List<ViewPagosAsignaciones>> GetPagosFechasAsync(PagosFechasRequest request)
+    {
+      var result = new List<ViewPagosAsignaciones>();
+      if (request.IdProyecto == "")
+      {
+        if (request.Desde != "" && request.Hasta != "")
+          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo >= Convert.ToDateTime(request.Desde) && m.FechaRecibo <= Convert.ToDateTime(request.Hasta) && m.FechaRecibo != null);
+        else if (request.Desde != "" && request.Hasta == "")
+          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo.Value.Date == Convert.ToDateTime(request.Desde) && m.FechaRecibo != null);
+      }
+      else
+      {
+        if (request.Desde != "" && request.Hasta != "")
+          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo >= Convert.ToDateTime(request.Desde) && m.FechaRecibo <= Convert.ToDateTime(request.Hasta) && m.FechaRecibo != null && m.IdUbicacion.ToString()==request.IdProyecto);
+        else if (request.Desde != "" && request.Hasta == "")
+          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo.Value.Date == Convert.ToDateTime(request.Desde) && m.FechaRecibo != null && m.IdUbicacion.ToString()==request.IdProyecto);
+      }
       
+
+      return result;
+
+
+
     }
   }
 }
