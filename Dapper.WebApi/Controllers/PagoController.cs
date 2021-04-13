@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Dapper.Application.DTOs.RequestModels;
 using Dapper.Application.Interfaces;
@@ -23,31 +24,31 @@ namespace Dapper.WebApi.Controllers
       _repository = repository;
     }
 
-    /// GET api/pago/GetDatosPago/2
-    /// <summary>
-    /// Obtiene el listado de pagos segun algunas condiciones
-    /// </summary>
-    ///// <param name="id">Id del Pago a buscar</param>
-    /// <returns>Datos del pago</returns>
-    /* [HttpGet("GetDatosPago/{id}")]
-    public async Task<Response<ViewPagosAsignaciones>> GetDatosPago(int id)
-    {
-      return new Response<ViewPagosAsignaciones>((await _repository.FindAsync<ViewPagosAsignaciones>(a => a.IdPago == id)).FirstOrDefault());
-    } */
-
     /// GET api/pago/GetListado
     /// <summary>
     /// Obtiene el listado de pagos segun algunas condiciones
     /// </summary>
     /// <param name="vigentes">Condicional para filtrar asignaciones vigentes</param>
+    /// <param name="take"></param>
+    /// <param name="skip"></param>
     /// <returns>Listado de Pagos filtrados</returns>
     [HttpGet("GetListado")]
-    public async Task<Response<ViewPagosAsignaciones>> GetListado(bool vigentes)
+    public async Task<Response<ViewPagosAsignaciones>> GetListado(bool vigentes, int take, int skip)
     {
+      Expression<Func<ViewPagosAsignaciones, bool>> exp = a => a.Donado == false;
       if (vigentes)
-        return new Response<ViewPagosAsignaciones>(await _repository.FindAsync<ViewPagosAsignaciones>(a => a.Donado == false && a.Estado == "Vigente"));
+        exp = a => a.Donado == false && a.Estado == "Vigente";
       else
-        return new Response<ViewPagosAsignaciones>(await _repository.FindAsync<ViewPagosAsignaciones>(a => a.MesPagado != null && a.Donado == false));
+        exp = a => a.MesPagado != null && a.Donado == false;
+      //Expression<Func<ViewPagosAsignaciones, object>> sort = a => a.IdAsignacion;
+      if (take != 0 || skip != 0)
+      {
+        return new Response<ViewPagosAsignaciones>(await _repository.FindAsync<ViewPagosAsignaciones>(take, skip, "IdPago",exp), await _repository.GetCount<ViewPagosAsignaciones>(exp));
+      }
+      else
+      {
+        return new Response<ViewPagosAsignaciones>(await _repository.FindAsync<ViewPagosAsignaciones>(exp));
+      }
     }
 
     /// GET api/pago/GetByAsignacion
@@ -69,7 +70,7 @@ namespace Dapper.WebApi.Controllers
     /// <returns>Plan de Pago de la Asignacion solicitada</returns>
     [HttpGet("GetPlanPago/{id}")]
     public async Task<Response<Asignacion_PlandePago>> GetPlanPago(int id)
-    {           
+    {
       /*var result = await _repository.Filter("SELECT * FROM FN_Asignacion_PlandePago('" + id + "')");
        if(((JArray)(JsonConvert.DeserializeObject(result))).Count==0)
           throw new KeyNotFoundException("Asignación no encontrada.");
@@ -88,11 +89,11 @@ namespace Dapper.WebApi.Controllers
     /// <param name="idpago">key del pago</param>
     /// <returns>Datos de los meses a pagar</returns>
     [HttpGet("GetMesesPagar/{id}")]
-    public async Task<Response<Asignacion_PlandePago>> GetMesesPagar(int id,int idpago)
+    public async Task<Response<Asignacion_PlandePago>> GetMesesPagar(int id, int idpago)
     {
-      var result = await _repository.Filter("SELECT MesPagado,Estado,MontoMinimo,ISNULL(Interes,0) Interes,ISNULL(Mora,0) Mora,TotalPagar FROM FN_Asignacion_PlandePago('"+id+"') WHERE (MesPagado!='Prima' and Estado !='Cancelado') OR MesPagado= (SELECT MesPagado FROM Pagos WHERE IdPago="+ idpago +")");
-      if(((JArray)(JsonConvert.DeserializeObject(result))).Count==0)
-          throw new KeyNotFoundException("Asignación no encontrada.");
+      var result = await _repository.Filter("SELECT MesPagado,Estado,MontoMinimo,ISNULL(Interes,0) Interes,ISNULL(Mora,0) Mora,TotalPagar FROM FN_Asignacion_PlandePago('" + id + "') WHERE (MesPagado!='Prima' and Estado !='Cancelado') OR MesPagado= (SELECT MesPagado FROM Pagos WHERE IdPago=" + idpago + ")");
+      if (((JArray)(JsonConvert.DeserializeObject(result))).Count == 0)
+        throw new KeyNotFoundException("Asignación no encontrada.");
 
       List<Asignacion_PlandePago> plandePago = new List<Asignacion_PlandePago>();
       JsonConvert.PopulateObject(result, plandePago, new JsonSerializerSettings());
@@ -100,7 +101,7 @@ namespace Dapper.WebApi.Controllers
     }
 
     /// <summary>
-    /// 
+    /// Obtiene los datos del ticket de pago del parametro
     /// </summary>
     /// <param name="id">Id del Pago a Generar Ticket</param>
     /// <returns></returns>
@@ -111,6 +112,11 @@ namespace Dapper.WebApi.Controllers
       return new Response<TicketPago>(result);
     }
 
+    /// <summary>
+    /// Obtiene los datos de los graficos de pagos por fecha
+    /// </summary>
+    /// <param name="fechapago">Fecha a obtener datos</param>
+    /// <returns></returns>
     [HttpGet("GetGrafico")]
     public async Task<Response<ViewGraficoPagos>> GetGrafico(string fechapago)
     {
@@ -118,6 +124,10 @@ namespace Dapper.WebApi.Controllers
       return new Response<ViewGraficoPagos>(result);
     }
 
+    /// <summary>
+    /// Obtiene listado de Asignaciones en Mora
+    /// </summary>
+    /// <returns></returns>
     [HttpGet("GetMorosos")]
     public async Task<Response<ViewReporteMorosos>> GetMorosos()
     {
@@ -125,8 +135,13 @@ namespace Dapper.WebApi.Controllers
       return new Response<ViewReporteMorosos>(await _repository.FindAsync<ViewReporteMorosos>(m => m.CuotasRequeridas > m.Cuotas));
     }
 
+    /// <summary>
+    /// Obtiene los pagos entre determinadas fechas y proyecto seleccionado1
+    /// </summary>
+    /// <param name="request">Parametros para generar resultados</param>
+    /// <returns></returns>
     [HttpGet("GetPagosFechas")]
-    public async Task<Response<ViewPagosAsignaciones>> GetPagosFechas([FromQuery]PagosFechasRequest request)
+    public async Task<Response<ViewPagosAsignaciones>> GetPagosFechas([FromQuery] PagosFechasRequest request)
     {
       var result = await _repository.GetPagosFechasAsync(request);
       return new Response<ViewPagosAsignaciones>(result);

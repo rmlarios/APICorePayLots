@@ -34,9 +34,10 @@ namespace Dapper.WebApi.Controllers
     /// </summary>    
     /// <returns>Lista de asignaciones con datos de saldo y abonos</returns>
     [HttpGet("GetAsignaciones")]
-    public async Task<Response<ViewAsignacionesSaldo>> GetAsignaciones()
+    public async Task<Response<ViewAsignacionesSaldo>> GetAsignaciones(int take, int skip)
     {
-      return new Response<ViewAsignacionesSaldo>(await _repository.GetAllData<ViewAsignacionesSaldo>());
+      //return new Response<ViewAsignacionesSaldo>(await _repository.GetAllData<ViewAsignacionesSaldo>());
+      return new Response<ViewAsignacionesSaldo>(await _repository.FindAsync<ViewAsignacionesSaldo>(take, skip));
     }
 
     // GET api/GetbyBenef/5

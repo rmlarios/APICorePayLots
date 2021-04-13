@@ -37,17 +37,20 @@ namespace Dapper.WebApi.Controllers
         base.OnActionExecuting(context);
     } */
 
-    
-    
+
+
     // GET api/{T}/Listar
     /// <summary>
     /// Lista todos los registros de la entidad
     /// </summary>
     /// <returns>Lista de registros</returns>
     [HttpGet("Listar")]
-    public async Task<Response<T>> GetAll()
+    public async Task<Response<T>> GetAll(int take,int skip)
     {
-      return new Response<T>(await _repo.GetAllAsync());
+      if(take!=0 || skip!=0)
+        return new Response<T>(await _repo.GetAllAsync(take,skip), await _repo.GetCount<T>());
+        else
+        return new Response<T>(await _repo.GetAllAsync());
     }
 
     // GET api/{T}/5
@@ -65,8 +68,7 @@ namespace Dapper.WebApi.Controllers
     // POST api/{T}
     /// <summary>
     /// Agrega un registro a la Base de Datos
-    /// </summary>
-    /// <param name="id"></param>
+    /// </summary>    
     /// <param name="entity">Clase con los valor a agregar</param>
     /// <returns>El registro creado</returns>
     [HttpPost("Create")]

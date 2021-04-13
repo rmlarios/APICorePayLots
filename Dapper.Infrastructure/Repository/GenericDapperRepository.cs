@@ -27,12 +27,12 @@ namespace Dapper.Infrastructure.Repository
 
     public GenericDapperRepository(IConfiguration configuration, PayLotsDBContext context)
     {
-      _connectionstring = configuration.GetConnectionString("PayLotsConnectionString");     
+      _connectionstring = configuration.GetConnectionString("PayLotsConnectionString");
       _context = context;
 
     }
 
-    public virtual Task<int> AddUpdateAsync(int id,T entity)
+    public virtual Task<int> AddUpdateAsync(int id, T entity)
     {
       throw new System.NotImplementedException();
     }
@@ -47,10 +47,15 @@ namespace Dapper.Infrastructure.Repository
       return await _context.Set<T>().ToListAsync();
     }
 
-    public async Task<List<M>> GetAllData<M>() where M: class
+    public async Task<List<T>> GetAllAsync(int t, int s)
+    {
+      return await _context.Set<T>().Skip(s).Take(t).ToListAsync();
+    }
+
+    public async Task<List<M>> GetAllData<M>() where M : class
     {
       return await _context.Set<M>().ToListAsync();
-    } 
+    }
 
     public async Task<T> GetByIdAsync(int id)
     {
@@ -74,13 +79,34 @@ namespace Dapper.Infrastructure.Repository
       } */
     }
 
-    public async Task<List<M>> FindAsync<M>(Expression<Func<M, bool>> expression=null) where M : class
+    public async Task<List<M>> FindAsync<M>(Expression<Func<M, bool>> expression = null) where M : class
     {
-      if(expression!=null)
+      if (expression != null)
         return await _context.Set<M>().Where(expression).ToListAsync();
       else
-       return await _context.Set<M>().ToListAsync();
+        return await _context.Set<M>().ToListAsync();
     }
+
+    public async Task<List<M>> FindAsync<M>(int t, int s, string sort=null, Expression<Func<M, bool>> expression = null) where M : class
+    {
+      if (sort != null && sort != "")
+      {
+        if (expression != null)
+          return await _context.Set<M>().Where(expression).OrderByDescending(CreateExpression<M>(sort)).Skip(s).Take(t).ToListAsync();
+        else
+          return await _context.Set<M>().OrderByDescending(CreateExpression<M>(sort)).Skip(s).Take(t).ToListAsync();
+      }
+      else
+      {
+        if (expression != null)
+          return await _context.Set<M>().Where(expression).Skip(s).Take(t).ToListAsync();
+        else
+          return await _context.Set<M>().Skip(s).Take(t).ToListAsync();
+      }
+
+    }
+
+
     #region :::::::::UTILIDADES
     /// <summary>
     /// Funcion que permite ejecutar un procedimiento almacenado como Escalar
@@ -91,13 +117,13 @@ namespace Dapper.Infrastructure.Repository
     public async Task<object> ExecuteSP(string query, object paramet)
     {
       using (var conn = new SqlConnection(_connectionstring))
-      {       
+      {
         await conn.OpenAsync();
         var result = await conn.ExecuteScalarAsync(sql: query, param: paramet, commandTimeout: 0, commandType: CommandType.StoredProcedure);
 
         string IdentityUser = ((DynamicParameters)paramet).Get<string>("IdentityUser");
         string ErrorSql = ObtenerErrorSQL(IdentityUser);
-        if(ErrorSql!="")
+        if (ErrorSql != "")
           throw new ApiException(ErrorSql);
 
 
@@ -106,12 +132,12 @@ namespace Dapper.Infrastructure.Repository
       //var result =  await _context.Database.ExecuteSqlRawAsync(sql:query,parameters:paramet);
       //return result;
     }
-    
-    
-    public async Task<List<M>> ExecuteReader<M>(string query,object paramet, CommandType type=CommandType.StoredProcedure) where M : class
+
+
+    public async Task<List<M>> ExecuteReader<M>(string query, object paramet, CommandType type = CommandType.StoredProcedure) where M : class
     {
-       using (var conn = new SqlConnection(_connectionstring))
-      {       
+      using (var conn = new SqlConnection(_connectionstring))
+      {
         await conn.OpenAsync();
         //List<M> result = new List<M>();
         var result = await conn.QueryAsync<M>(query, paramet, commandTimeout: 0, commandType: type);
@@ -146,8 +172,8 @@ namespace Dapper.Infrastructure.Repository
     public string ObtenerErrorSQL(string IdentityUser)
     {
       //var error = _context.Set<ErrorSql>().Where(p => p.IdentityUser == IdentityUser).Select(s => new { s.ErrorSql1 });
-      var error = _context.Set<ErrorSql>().Where(p => p.IdentityUser==IdentityUser).Select(s => s.ErrorSql1).FirstOrDefault();
-      return error==null ? "":error.ToString();
+      var error = _context.Set<ErrorSql>().Where(p => p.IdentityUser == IdentityUser).Select(s => s.ErrorSql1).FirstOrDefault();
+      return error == null ? "" : error.ToString();
     }
 
     public async Task<string> Filter(string query)
@@ -170,6 +196,27 @@ namespace Dapper.Infrastructure.Repository
         return JsonConvert.SerializeObject(dt);
 
       }
+    }
+
+    public async Task<int> GetCount<M>(Expression<Func<M, bool>> expression = null) where M : class
+    {
+      if (expression == null)
+        return await _context.Set<M>().CountAsync();
+      else
+        return await _context.Set<M>().Where(expression).CountAsync();
+
+    }
+
+    static Expression<Func<M, object>> CreateExpression<M>(string propertyName)
+    {
+      var type = typeof(M);
+      var property = type.GetProperty(propertyName);
+      var parameter = Expression.Parameter(type);
+      var access = Expression.Property(parameter, property);
+      var convert = Expression.Convert(access, typeof(object));
+      var function = Expression.Lambda<Func<M, object>>(convert, parameter);
+
+      return function;
     }
     #endregion
 

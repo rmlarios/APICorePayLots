@@ -4,7 +4,7 @@
         <name>Dapper.WebApi</name>
     </assembly>
     <members>
-        <member name="M:Dapper.WebApi.Controllers.AsignacionController.GetAsignaciones">
+        <member name="M:Dapper.WebApi.Controllers.AsignacionController.GetAsignaciones(System.Int32,System.Int32)">
             <summary>
             Listar Asignaciones
             </summary>    
@@ -38,7 +38,7 @@
             <param name="request">Key de la Asignacion a activar</param>
             <returns>Mensaje de confirmacion</returns>
         </member>
-        <member name="M:Dapper.WebApi.Controllers.BaseController`1.GetAll">
+        <member name="M:Dapper.WebApi.Controllers.BaseController`1.GetAll(System.Int32,System.Int32)">
             <summary>
             Lista todos los registros de la entidad
             </summary>
@@ -54,8 +54,7 @@
         <member name="M:Dapper.WebApi.Controllers.BaseController`1.PostCreate(`0)">
             <summary>
             Agrega un registro a la Base de Datos
-            </summary>
-            <param name="id"></param>
+            </summary>    
             <param name="entity">Clase con los valor a agregar</param>
             <returns>El registro creado</returns>
         </member>
@@ -104,12 +103,14 @@
             </summary>    
             <returns>Lista de Bloques filtrados</returns>
         </member>
-        <member name="M:Dapper.WebApi.Controllers.PagoController.GetListado(System.Boolean)">
+        <member name="M:Dapper.WebApi.Controllers.PagoController.GetListado(System.Boolean,System.Int32,System.Int32)">
             GET api/pago/GetListado
             <summary>
             Obtiene el listado de pagos segun algunas condiciones
             </summary>
             <param name="vigentes">Condicional para filtrar asignaciones vigentes</param>
+            <param name="take"></param>
+            <param name="skip"></param>
             <returns>Listado de Pagos filtrados</returns>
         </member>
         <member name="M:Dapper.WebApi.Controllers.PagoController.GetByAsignacion(System.Int32)">
@@ -137,9 +138,29 @@
         </member>
         <member name="M:Dapper.WebApi.Controllers.PagoController.GetTicket(System.Int32)">
             <summary>
-            
+            Obtiene los datos del ticket de pago del parametro
             </summary>
             <param name="id">Id del Pago a Generar Ticket</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.WebApi.Controllers.PagoController.GetGrafico(System.String)">
+            <summary>
+            Obtiene los datos de los graficos de pagos por fecha
+            </summary>
+            <param name="fechapago">Fecha a obtener datos</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.WebApi.Controllers.PagoController.GetMorosos">
+            <summary>
+            Obtiene listado de Asignaciones en Mora
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dapper.WebApi.Controllers.PagoController.GetPagosFechas(Dapper.Application.DTOs.RequestModels.PagosFechasRequest)">
+            <summary>
+            Obtiene los pagos entre determinadas fechas y proyecto seleccionado1
+            </summary>
+            <param name="request">Parametros para generar resultados</param>
             <returns></returns>
         </member>
         <member name="M:Dapper.WebApi.Controllers.ProformaController.GetProforma(System.Int32)">

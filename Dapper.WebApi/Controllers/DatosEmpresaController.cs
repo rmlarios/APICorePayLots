@@ -15,16 +15,16 @@ namespace Dapper.WebApi.Controllers
   [ApiController]
   public class DatosEmpresaController : BaseController<DatosEmpresa>
   {
-    private readonly IDatosEmpresaRepository _repo;
+    private readonly IDatosEmpresaRepository _repository;
     public DatosEmpresaController(IDatosEmpresaRepository repo) : base(repo)
     {
-      _repo = repo;
+      _repository = repo;
     }
 
    [HttpPost("Backup")]
     public async Task<Response<string>> PostBackup (RespaldoRequest request)
     {
-      var result = await _repo.BackupAsync(request);
+      var result = await _repository.BackupAsync(request);
       return new Response<string>(result,true);
     }
 
