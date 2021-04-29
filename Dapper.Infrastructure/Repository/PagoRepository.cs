@@ -64,13 +64,15 @@ namespace Dapper.Infrastructure.Repository
       return result;
     }
 
-    public async Task<List<Asignacion_PlandePago>> GenerarPlanPago(int id)
+    public async Task<List<Asignacion_PlandePago>> GenerarPlanPago(int id,string opcion)
     {
       string user = _userAccesor.GetCurrentUser();
       var queryParameters = new DynamicParameters();
       queryParameters.Add("@IdAsignacion", id);
       queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
+      queryParameters.Add("@opcion", opcion);
       var result = await ExecuteReader<Asignacion_PlandePago>("SP_PlanPagoGenerar", queryParameters);
+      //var result = await ExecuteReader<Asignacion_PlandePago>("SP_EstadoCuentaGenerar", queryParameters);
       return result;
     }
 
@@ -97,16 +99,16 @@ namespace Dapper.Infrastructure.Repository
       if (request.IdProyecto == "")
       {
         if (request.Desde != "" && request.Hasta != "")
-          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo >= Convert.ToDateTime(request.Desde) && m.FechaRecibo <= Convert.ToDateTime(request.Hasta) && m.FechaRecibo != null);
+          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo >= Convert.ToDateTime(request.Desde) && m.FechaRecibo <= Convert.ToDateTime(request.Hasta) && m.FechaRecibo != null && m.EstadoPago=="Vigente");
         else if (request.Desde != "" && request.Hasta == "")
-          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo.Value.Date == Convert.ToDateTime(request.Desde) && m.FechaRecibo != null);
+          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo.Value.Date == Convert.ToDateTime(request.Desde) && m.FechaRecibo != null && m.EstadoPago=="Vigente");
       }
       else
       {
         if (request.Desde != "" && request.Hasta != "")
-          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo >= Convert.ToDateTime(request.Desde) && m.FechaRecibo <= Convert.ToDateTime(request.Hasta) && m.FechaRecibo != null && m.IdUbicacion.ToString()==request.IdProyecto);
+          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo >= Convert.ToDateTime(request.Desde) && m.FechaRecibo <= Convert.ToDateTime(request.Hasta) && m.FechaRecibo != null && m.IdUbicacion.ToString()==request.IdProyecto && m.EstadoPago=="Vigente");
         else if (request.Desde != "" && request.Hasta == "")
-          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo.Value.Date == Convert.ToDateTime(request.Desde) && m.FechaRecibo != null && m.IdUbicacion.ToString()==request.IdProyecto);
+          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo.Value.Date == Convert.ToDateTime(request.Desde) && m.FechaRecibo != null && m.IdUbicacion.ToString()==request.IdProyecto && m.EstadoPago=="Vigente");
       }
       
 
@@ -114,6 +116,18 @@ namespace Dapper.Infrastructure.Repository
 
 
 
+    }
+
+    public async Task AnularPago(AnularPagoRequest request)
+    {
+       string user = _userAccesor.GetCurrentUser();
+      var queryParameters = new DynamicParameters();
+      queryParameters.Add("@IdPago", request.IdPago);
+      queryParameters.Add("@Observaciones", request.Observaciones);
+      queryParameters.Add("@UUA", user);
+      queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
+      var result = await ExecuteSP("SP_PagoAnular", queryParameters);
+      //return true;
     }
   }
 }

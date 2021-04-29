@@ -50,5 +50,6 @@ namespace Dapper.Core.Model
         [Column(TypeName = "numeric(18, 2)")]
         public decimal? MontoEfectivo { get; set; }
          public bool? PrimaCancelada { get; set; }
+         public string EstadoPago { get; set; }
     }
 }

@@ -36,8 +36,11 @@ namespace Dapper.WebApi.Controllers
     [HttpGet("GetAsignaciones")]
     public async Task<Response<ViewAsignacionesSaldo>> GetAsignaciones(int take, int skip)
     {
+      if(take!=0 || skip!=0)
       //return new Response<ViewAsignacionesSaldo>(await _repository.GetAllData<ViewAsignacionesSaldo>());
-      return new Response<ViewAsignacionesSaldo>(await _repository.FindAsync<ViewAsignacionesSaldo>(take, skip));
+      return new Response<ViewAsignacionesSaldo>(await _repository.FindAsync<ViewAsignacionesSaldo>(take, skip),await _repository.GetCount<ViewAsignacionesSaldo>());
+      else
+        return new Response<ViewAsignacionesSaldo>(await _repository.FindAsync<ViewAsignacionesSaldo>());
     }
 
     // GET api/GetbyBenef/5
@@ -99,9 +102,9 @@ namespace Dapper.WebApi.Controllers
 
     
     [HttpGet("GetEstadoCuenta/{id}")]
-    public async Task<Response<EstadoCuenta>> GetEstadoCuenta(int id)
+    public async Task<Response<EstadoCuenta>> GetEstadoCuenta(int id,string opcion)
     {
-      var result = await _repository.GenerarEstadoCuenta(id);
+      var result = await _repository.GenerarEstadoCuenta(id,opcion);
       return new Response<EstadoCuenta>(result);
     }
 

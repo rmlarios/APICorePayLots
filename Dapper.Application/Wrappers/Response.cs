@@ -14,7 +14,7 @@ namespace Dapper.Application.Wrappers
     {
       Succeeded = true;
       Datas = datas;
-      Count = count;
+      Count = count!=0? count : Datas.Count;
     }
     public Response(T data, string message = null)
     {

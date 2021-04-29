@@ -69,7 +69,7 @@ namespace Dapper.WebApi.Controllers
     /// <param name="id">Key de la Asignacion</param>
     /// <returns>Plan de Pago de la Asignacion solicitada</returns>
     [HttpGet("GetPlanPago/{id}")]
-    public async Task<Response<Asignacion_PlandePago>> GetPlanPago(int id)
+    public async Task<Response<Asignacion_PlandePago>> GetPlanPago(int id,string opcion)
     {
       /*var result = await _repository.Filter("SELECT * FROM FN_Asignacion_PlandePago('" + id + "')");
        if(((JArray)(JsonConvert.DeserializeObject(result))).Count==0)
@@ -78,7 +78,7 @@ namespace Dapper.WebApi.Controllers
       List<Asignacion_PlandePago> plandePago = new List<Asignacion_PlandePago>();
       JsonConvert.PopulateObject(result, plandePago, new JsonSerializerSettings());
       return new Response<Asignacion_PlandePago>(plandePago);*/
-      var result = await _repository.GenerarPlanPago(id);
+      var result = await _repository.GenerarPlanPago(id,opcion);
       return new Response<Asignacion_PlandePago>(result);
     }
 
@@ -145,6 +145,14 @@ namespace Dapper.WebApi.Controllers
     {
       var result = await _repository.GetPagosFechasAsync(request);
       return new Response<ViewPagosAsignaciones>(result);
+    }
+
+
+    [HttpPost("Anular")]
+    public async Task<Response<string>> PostAnular (AnularPagoRequest request)
+    {
+      await _repository.AnularPago(request);
+      return new Response<string>("Anulado Correctamente",true);
     }
 
 

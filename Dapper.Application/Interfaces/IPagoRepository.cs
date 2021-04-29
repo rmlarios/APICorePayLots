@@ -9,9 +9,10 @@ namespace Dapper.Application.Interfaces
 {
   public interface IPagoRepository : IGenericDapperRepository<Pagos>
   {
-    Task<List<Asignacion_PlandePago>> GenerarPlanPago(int id);
+    Task<List<Asignacion_PlandePago>> GenerarPlanPago(int id,string opcion);
     Task<List<TicketPago>> GenerarTicket(int id);
     Task<List<ViewGraficoPagos>> GetGraficoPagosAsync(string FiltroFechaGrafico);
     Task<List<ViewPagosAsignaciones>> GetPagosFechasAsync(PagosFechasRequest request);
+    Task AnularPago(AnularPagoRequest request);
   }
 }

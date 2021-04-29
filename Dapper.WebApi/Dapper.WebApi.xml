@@ -96,7 +96,7 @@
             </summary>    
             <returns>Lista de Bloques filtrados</returns>
         </member>
-        <member name="M:Dapper.WebApi.Controllers.LoteController.GetLotes">
+        <member name="M:Dapper.WebApi.Controllers.LoteController.GetLotes(System.Int32,System.Int32)">
             GET api/GetbyUbicaciones
             <summary>
             Obtiene los Lotes registrados y su estado actual
@@ -121,7 +121,7 @@
             <param name="id">Key de la Asignacion a filtrar</param>
             <returns>Listado de Pagos filtrados por Asignacion</returns>
         </member>
-        <member name="M:Dapper.WebApi.Controllers.PagoController.GetPlanPago(System.Int32)">
+        <member name="M:Dapper.WebApi.Controllers.PagoController.GetPlanPago(System.Int32,System.String)">
             <summary>
             Genera el Plan de Pago de una Asignacion
             </summary>

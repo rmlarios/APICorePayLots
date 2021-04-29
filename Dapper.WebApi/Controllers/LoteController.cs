@@ -26,9 +26,12 @@ namespace Dapper.WebApi.Controllers
     /// </summary>    
     /// <returns>Lista de Bloques filtrados</returns>
     [HttpGet("GetLotes")]
-    public async Task<Response<ViewLotes>> GetLotes()
+    public async Task<Response<ViewLotes>> GetLotes(int take, int skip)
     {      
-      return new Response<ViewLotes>(await _repository.FindAsync<ViewLotes>());      
+      if(take!=0 || skip!=0)
+        return new Response<ViewLotes>(await _repository.FindAsync<ViewLotes>(take, skip), await _repo.GetCount<ViewLotes>());
+      else
+        return new Response<ViewLotes>(await _repository.FindAsync<ViewLotes>(), await _repo.GetCount<ViewLotes>());      
     }     
 
   }

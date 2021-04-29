@@ -11,7 +11,7 @@ namespace Dapper.Application.Interfaces
   public interface IAsignacionesRepository : IGenericDapperRepository<Asignaciones>
   {
     Task AnularAsignacion(AnularAsignacionRequest request);
-    Task<List<EstadoCuenta>> GenerarEstadoCuenta(int id);    
+    Task<List<EstadoCuenta>> GenerarEstadoCuenta(int id,string opcion);    
     Task ActivarAsignacion(ActivarRequest request);
   }
 }
