@@ -4,6 +4,7 @@ namespace Dapper.Infraestructure.Identity.Models
 {
     public class ApplicationUser : IdentityUser
     {
-         public bool IsActive { get; set; }        
+         public bool IsActive { get; set; }
+                 
     }
 }

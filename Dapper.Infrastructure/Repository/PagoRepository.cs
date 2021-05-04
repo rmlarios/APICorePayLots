@@ -64,15 +64,15 @@ namespace Dapper.Infrastructure.Repository
       return result;
     }
 
-    public async Task<List<Asignacion_PlandePago>> GenerarPlanPago(int id,string opcion)
+    public async Task<List<EstadoCuenta>> GenerarPlanPago(int id,string opcion)
     {
       string user = _userAccesor.GetCurrentUser();
       var queryParameters = new DynamicParameters();
       queryParameters.Add("@IdAsignacion", id);
       queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
       queryParameters.Add("@opcion", opcion);
-      var result = await ExecuteReader<Asignacion_PlandePago>("SP_PlanPagoGenerar", queryParameters);
-      //var result = await ExecuteReader<Asignacion_PlandePago>("SP_EstadoCuentaGenerar", queryParameters);
+      //var result = await ExecuteReader<Asignacion_PlandePago>("SP_PlanPagoGenerar", queryParameters);
+      var result = await ExecuteReader<EstadoCuenta>("SP_EstadoCuentaGenerar", queryParameters);
       return result;
     }
 

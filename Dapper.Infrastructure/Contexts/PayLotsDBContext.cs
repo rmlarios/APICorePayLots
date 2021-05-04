@@ -67,7 +67,8 @@ namespace Dapper.Infrastructure.Contexts
     public virtual DbSet<ViewDepartamentosMunicipios> ViewDepartamentosMunicipios { get; set; }
         public virtual DbSet<ViewGraficoPagos> ViewGraficoPagos { get; set; }
         public virtual DbSet<ViewLotes> ViewLotes { get; set; }
-        public virtual DbSet<ViewPagosAsignaciones> ViewPagosAsignaciones { get; set; }
+        public virtual DbSet<ViewPagosAnulados> ViewPagosAnulados{ get; set; }
+    public virtual DbSet<ViewPagosAsignaciones> ViewPagosAsignaciones { get; set; }
         public virtual DbSet<ViewReporteMorosos> ViewReporteMorosos { get; set; }
         public virtual DbSet<ViewReportePlanPago> ViewReportePlanPago { get; set; }
         public virtual DbSet<ViewReporteTicketPago> ViewReporteTicketPago { get; set; }
@@ -382,6 +383,13 @@ namespace Dapper.Infrastructure.Contexts
                 entity.HasNoKey();
 
                 entity.ToView("View_Asignaciones_Saldo");
+            });
+
+            modelBuilder.Entity<ViewPagosAnulados>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("View_PagosAnulados");
             });
 
             modelBuilder.Entity<ViewBloquesUbicacion>(entity =>

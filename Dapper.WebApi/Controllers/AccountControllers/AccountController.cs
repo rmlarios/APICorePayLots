@@ -77,8 +77,13 @@ namespace Dapper.WebApi.Controllers.AccountControllers
       return await _accountService.ResetPassword(request);
     }
 
-
-
+    [HttpDelete("{id}")]
+    public async Task<Response<string>> DeleteById(string id)
+    {
+      var obj = await _accountService.GetByIdAsync(id);
+      await _accountService.DisableUser(id);
+      return new Response<string>("Eliminado Correctamente",true);
+    }
     private string GenerateIPAddress()
     {
       if (Request.Headers.ContainsKey("X-Forwarded-For"))

@@ -62,7 +62,7 @@ namespace Dapper.Infrastructure.Repository
 
     }
 
-    public async Task<List<EstadoCuenta>> GenerarEstadoCuenta(int id,string opcion)
+    public async Task<List<EstadoCuenta>> GenerarEstadoCuenta(int id,string opcion="A LA FECHA")
     {
       string user = _userAccesor.GetCurrentUser();
       var queryParameters = new DynamicParameters();

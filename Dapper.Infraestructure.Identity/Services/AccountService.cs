@@ -274,6 +274,7 @@ namespace Dapper.Infraestructure.Identity.Services
       foreach (var u in users)
       {
         model = new ApplicationUserModel();
+        model.Id = u.Id;
         model.UserName = u.UserName;
         model.Email = u.Email;
         model.IsActive = u.IsActive;
@@ -311,8 +312,16 @@ namespace Dapper.Infraestructure.Identity.Services
       }
       user.UserName = request.UserName;
       user.Email = request.Email;
-      user.IsActive = request.IsActive;
+      user.IsActive = request.IsActive;      
       await _userManager.UpdateAsync(user);
+      var roles = await _userManager.GetRolesAsync(user);      
+      if(roles.Count!=0)
+        if(roles.ToList()[0]!=request.Rol && request.Rol!="")
+        {
+          await _userManager.RemoveFromRoleAsync(user, roles.ToList()[0]);
+          await _userManager.AddToRoleAsync(user, request.Rol);
+        }
+      
 
       return new Response<ApplicationUserModel>(request);
     }
@@ -325,7 +334,7 @@ namespace Dapper.Infraestructure.Identity.Services
       {
         UserName = user.UserName,
         Email = user.Email,
-        IsActive = user.IsActive
+        IsActive = user.IsActive        
       };
 
     }
@@ -370,6 +379,17 @@ public async Task<Response<ChangePasswordRequest>> ChangePassword(ChangePassword
     public async Task<List<string>> GetRoles()
     {
       return await _roleManager.Roles.Select(m=>m.Name).ToListAsync();
+    }
+
+    public async Task DisableUser (string id)
+    {
+      var user = await _userManager.FindByIdAsync(id);
+      if(user!=null)
+      {
+        user.IsActive = false;
+        user.EmailConfirmed = false;
+        await _userManager.UpdateAsync(user);
+      }
     }
   }
 }
