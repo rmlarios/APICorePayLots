@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Dapper.Application.DTOs.RequestModels;
 using Dapper.Application.Interfaces;
 using Dapper.Application.Interfaces.Account;
 using Dapper.Core.Model;
@@ -43,6 +45,14 @@ public override async Task<int> AddUpdateAsync(int id,AbonosPrima prima)
       return true;
     }
 
-
+    public async Task<List<TicketPrima>> GenerarTicketPrima(int id)
+    {
+      string user = _userAccesor.GetCurrentUser();
+      var queryParameters = new DynamicParameters();
+      queryParameters.Add("@IdAbonoPrima", id);
+      queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
+      var result = await ExecuteReader<TicketPrima>("SP_TicketPrimaGenerar", queryParameters);
+      return result;
     }
+  }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Dapper.Application.DTOs.RequestModels;
 using Dapper.Application.Interfaces;
 using Dapper.Application.Wrappers;
 using Dapper.Core.Model;
@@ -15,11 +16,18 @@ namespace Dapper.WebApi.Controllers
       _repository = repo;
     }
 
-[HttpGet("GetListado")]
+    [HttpGet("GetListado")]
     public async Task<Response<ViewAbonosPrima>> GetListado()
     {
-      
-        return new Response<ViewAbonosPrima>(await _repository.FindAsync<ViewAbonosPrima>());
+
+      return new Response<ViewAbonosPrima>(await _repository.FindAsync<ViewAbonosPrima>());
+    }
+
+     [HttpGet("GetTicketPrima/{id}")]
+    public async Task<Response<TicketPrima>> GetTicket(int id)
+    {
+      var result = await _repository.GenerarTicketPrima(id);
+      return new Response<TicketPrima>(result);
     }
 
 
