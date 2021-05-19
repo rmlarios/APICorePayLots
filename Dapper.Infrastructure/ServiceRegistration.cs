@@ -35,6 +35,7 @@ namespace Dapper.Infrastructure
       services.AddTransient<IPagoRepository, PagoRepository>();
       services.AddTransient<IDatosEmpresaRepository, DatosEmpresaRepository>();
       services.AddTransient<IAbonosPrimaRepository, AbonosPrimaRepository>();
+      services.AddTransient<IDashBoardRepository,DashboardRepository>();
     }
   }
 }

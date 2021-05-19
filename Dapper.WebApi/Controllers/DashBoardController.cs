@@ -9,10 +9,11 @@ namespace Dapper.WebApi.Controllers
 {
     public class DashBoardController : BaseController<ViewDashBoard>
     {
-        public DashBoardController(IGenericDapperRepository<ViewDashBoard> repo): base(repo)
+      private readonly IDashBoardRepository _repository;
+        public DashBoardController(IDashBoardRepository repo): base(repo)
         {
-            
-        }
+      _repository = repo;
+    }
 
         /// GET api/GetbyUbicaciones
     /// <summary>
@@ -22,7 +23,7 @@ namespace Dapper.WebApi.Controllers
     [HttpGet("GetSeguimientos")]
     public async Task<Response<Seguimientos>> GetSeguimientos()
     {      
-      return new Response<Seguimientos>(await _repo.FindAsync<Seguimientos>());      
+      return new Response<Seguimientos>(await _repository.FindAsync<Seguimientos>());      
     }     
     }
 }

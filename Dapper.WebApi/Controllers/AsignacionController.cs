@@ -108,5 +108,12 @@ namespace Dapper.WebApi.Controllers
       return new Response<EstadoCuenta>(result);
     }
 
+    [HttpGet("GetAsignacionesForm/{id}")]
+    public async Task<Response<ViewAsignacionesSaldo>> GetAsignacionesForm(int id)
+    {
+      Expression<Func<ViewAsignacionesSaldo, bool>> exp = a => (a.IdAsignacion == id) || (a.Estado == "Vigente" && a.PrimaCancelada == true);
+      return new Response<ViewAsignacionesSaldo>(await _repository.FindAsync<ViewAsignacionesSaldo>(exp));
+    }
+
   }
 }

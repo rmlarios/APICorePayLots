@@ -82,6 +82,8 @@ namespace Dapper.Infrastructure.Repository
       queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
       var result = await ExecuteSP("SP_AsignacionActivar", queryParameters);
     }
+
+    
    
   }
 }
