@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Dapper.Infraestructure.Identity;
 using Dapper.Infrastructure;
 using Dapper.WebApi.Extensions;
+using Dapper.WebApi.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +35,11 @@ namespace Dapper.WebApi
       services.AddInfrastructure(Configuration);
       services.AddIdentityInfrastructure(Configuration);
       services.AddSwaggerExtension();
+
+      var serviceProvider = services.BuildServiceProvider();
+      var logger = serviceProvider.GetService<ILogger<Log>>();
+      services.AddSingleton(typeof(ILogger), logger);
+
       services.AddControllers()
           .AddNewtonsoftJson(o =>
           {

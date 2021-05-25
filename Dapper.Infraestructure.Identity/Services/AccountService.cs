@@ -94,10 +94,13 @@ namespace Dapper.Infraestructure.Identity.Services
       response.Email = user.Email;
       response.UserName = user.UserName;
       var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
-      if(rolesList.Count==0)
+      if (rolesList.Count == 0)
         throw new ApiException($"Usuario no pertenece a ningún grupo.");
       response.Roles = rolesList.ToList();
+      var p = await _userManager.GetClaimsAsync(user);
+      response.Permisos = p.Where(m => m.Type.Equals("Permiso")).Select(v => v.Value).ToList();
       response.IsVerified = user.EmailConfirmed;
+
       var refreshToken = GenerateRefreshToken(ipAddress);
       response.RefreshToken = refreshToken.Token;
       return new Response<AuthenticationResponse>(response, $"Authenticated {user.UserName}");
@@ -236,8 +239,8 @@ namespace Dapper.Infraestructure.Identity.Services
 
       // always return ok response to prevent email enumeration
       if (account == null) return;
-      if(!account.EmailConfirmed) return;
-      if(!account.IsActive) return;
+      if (!account.EmailConfirmed) return;
+      if (!account.IsActive) return;
 
       var code = await _userManager.GeneratePasswordResetTokenAsync(account);
       var route = "api/account/reset-password/";
@@ -253,7 +256,7 @@ namespace Dapper.Infraestructure.Identity.Services
 
     public async Task<Response<ResetPasswordRequest>> ResetPassword(ResetPasswordRequest model)
     {
-      var account = await _userManager.FindByEmailAsync(model.Email);      
+      var account = await _userManager.FindByEmailAsync(model.Email);
       if (account == null) throw new ApiException($"No Accounts Registered with {model.Email}.");
       var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password);
       if (result.Succeeded)
@@ -312,16 +315,16 @@ namespace Dapper.Infraestructure.Identity.Services
       }
       user.UserName = request.UserName;
       user.Email = request.Email;
-      user.IsActive = request.IsActive;      
+      user.IsActive = request.IsActive;
       await _userManager.UpdateAsync(user);
-      var roles = await _userManager.GetRolesAsync(user);      
-      if(roles.Count!=0)
-        if(roles.ToList()[0]!=request.Rol && request.Rol!="")
+      var roles = await _userManager.GetRolesAsync(user);
+      if (roles.Count != 0)
+        if (roles.ToList()[0] != request.Rol && request.Rol != "")
         {
           await _userManager.RemoveFromRoleAsync(user, roles.ToList()[0]);
           await _userManager.AddToRoleAsync(user, request.Rol);
         }
-      
+
 
       return new Response<ApplicationUserModel>(request);
     }
@@ -334,15 +337,15 @@ namespace Dapper.Infraestructure.Identity.Services
       {
         UserName = user.UserName,
         Email = user.Email,
-        IsActive = user.IsActive        
+        IsActive = user.IsActive
       };
 
     }
 
-public async Task<Response<ChangePasswordRequest>> ChangePassword(ChangePasswordRequest request)
-{
-    var account = await _userManager.FindByEmailAsync(request.UserName);
-    if(account==null)
+    public async Task<Response<ChangePasswordRequest>> ChangePassword(ChangePasswordRequest request)
+    {
+      var account = await _userManager.FindByEmailAsync(request.UserName);
+      if (account == null)
         account = await _userManager.FindByNameAsync(request.UserName);
       if (account == null) throw new ApiException($"Datos Incorrectos.");
       var result = await _userManager.ChangePasswordAsync(account, request.currentpsw, request.newpsw);
@@ -353,8 +356,8 @@ public async Task<Response<ChangePasswordRequest>> ChangePassword(ChangePassword
       else
       {
         throw new ApiException($"Error al tratar de cambiar la contraseña.");
-      } 
-}
+      }
+    }
     public async Task AddUserToRoleAsync(ApplicationUser user, string roleName)
     {
       await CheckRoleAsync(roleName);
@@ -378,13 +381,13 @@ public async Task<Response<ChangePasswordRequest>> ChangePassword(ChangePassword
     }
     public async Task<List<string>> GetRoles()
     {
-      return await _roleManager.Roles.Select(m=>m.Name).ToListAsync();
+      return await _roleManager.Roles.Select(m => m.Name).ToListAsync();
     }
 
-    public async Task DisableUser (string id)
+    public async Task DisableUser(string id)
     {
       var user = await _userManager.FindByIdAsync(id);
-      if(user!=null)
+      if (user != null)
       {
         user.IsActive = false;
         user.EmailConfirmed = false;
