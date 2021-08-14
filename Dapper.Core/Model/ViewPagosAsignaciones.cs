@@ -51,5 +51,6 @@ namespace Dapper.Core.Model
         public decimal? MontoEfectivo { get; set; }
          public bool? PrimaCancelada { get; set; }
          public string EstadoPago { get; set; }
+         public decimal? PagoTuberia { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace Dapper.Application.DTOs.RequestModels
     public string Estado { get; set; }
     public decimal Mora { get; set; } = 0;
     public int DiasMora { get; set; } = 0;
+    public decimal PagoTuberia { get; set; } = 0;
 
     public string Empresa { get; set; } = "";
     public string DireccionEmpresa { get; set; } = "";

@@ -108,6 +108,13 @@ namespace Dapper.WebApi.Controllers
       return new Response<EstadoCuenta>(result);
     }
 
+     [HttpGet("GetPlandePagoInicial/{id}")]
+    public async Task<Response<Asignacion_PlandePago>> GetPlandePagoInicial(int id)
+    {
+      var result = await _repository.GenerarPlanInicial(id);
+      return new Response<Asignacion_PlandePago>(result);
+    }
+
     [HttpGet("GetAsignacionesForm/{id}")]
     public async Task<Response<ViewAsignacionesSaldo>> GetAsignacionesForm(int id)
     {

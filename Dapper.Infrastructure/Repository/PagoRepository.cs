@@ -35,6 +35,7 @@ namespace Dapper.Infrastructure.Repository
       queryParameters.Add("@TotalPagado", pago.MontoEfectivo);
       queryParameters.Add("@Interes", pago.Interés);
       queryParameters.Add("@Mora", pago.Mora);
+      queryParameters.Add("@PagoTuberia", pago.PagoTuberia);
       queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
       queryParameters.Add("@UUA", user);
 

@@ -42,5 +42,7 @@ namespace Dapper.Core.Model
         public decimal TasaInteres { get; set; }
         public bool AplicaMora { get; set; }
         public int Plazo { get; set; }
+        [Column(TypeName = "numeric(18, 2)")]
+    public decimal? MontoTuberia { get; set; }
     }
 }

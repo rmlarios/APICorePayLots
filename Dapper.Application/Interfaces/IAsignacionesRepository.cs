@@ -13,5 +13,7 @@ namespace Dapper.Application.Interfaces
     Task AnularAsignacion(AnularAsignacionRequest request);
     Task<List<EstadoCuenta>> GenerarEstadoCuenta(int id,string opcion);    
     Task ActivarAsignacion(ActivarRequest request);
+
+    Task<List<Asignacion_PlandePago>> GenerarPlanInicial(int id);
   }
 }

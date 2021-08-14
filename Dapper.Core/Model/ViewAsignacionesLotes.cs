@@ -46,5 +46,8 @@ namespace Dapper.Core.Model
         public int Plazo { get; set; }
         public int IdUbicacion { get; set; }
         public string Grupo { get; set; }
+        
+        [Column(TypeName = "numeric(18, 2)")]
+    public decimal? MontoTuberia { get; set; }
     }
 }

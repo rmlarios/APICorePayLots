@@ -83,7 +83,15 @@ namespace Dapper.Infrastructure.Repository
       var result = await ExecuteSP("SP_AsignacionActivar", queryParameters);
     }
 
-    
-   
+    public async Task<List<Asignacion_PlandePago>> GenerarPlanInicial(int id)
+    {
+       string user = _userAccesor.GetCurrentUser();
+      var queryParameters = new DynamicParameters();
+      queryParameters.Add("@IdAsignacion", id);
+      queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
+      
+      var result = await ExecuteReader<Asignacion_PlandePago>("SP_PlanPagoGenerar", queryParameters);
+      return result;
+    }
   }
 }

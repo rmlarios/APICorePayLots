@@ -91,7 +91,7 @@ namespace Dapper.WebApi.Controllers
     [HttpGet("GetMesesPagar/{id}")]
     public async Task<Response<Asignacion_PlandePago>> GetMesesPagar(int id, int idpago)
     {
-      var result = await _repository.Filter("SELECT MesPagado,Estado,MontoMinimo,ISNULL(Interes,0) Interes,ISNULL(Mora,0) Mora,TotalPagar FROM FN_Asignacion_PlandePago('" + id + "') WHERE (MesPagado!='Prima' and Estado !='Cancelado') OR MesPagado= (SELECT MesPagado FROM Pagos WHERE IdPago=" + idpago + ")");
+      var result = await _repository.Filter("SELECT MesPagado,Estado,MontoMinimo,ISNULL(Interes,0) Interes,ISNULL(Mora,0) Mora,TotalPagar,ISNULL(PagoTuberia,0) PagoTuberia FROM FN_Asignacion_PlandePago('" + id + "') WHERE (MesPagado!='Prima' and Estado !='Cancelado') OR MesPagado= (SELECT MesPagado FROM Pagos WHERE IdPago=" + idpago + ")");
       if (((JArray)(JsonConvert.DeserializeObject(result))).Count == 0)
         throw new KeyNotFoundException("Asignación no encontrada.");
 

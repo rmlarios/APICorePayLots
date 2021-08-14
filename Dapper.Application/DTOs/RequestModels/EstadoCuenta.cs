@@ -26,5 +26,7 @@ namespace Dapper.Application.DTOs.RequestModels
     public string DireccionEmpresa { get; set; } = "";
     public string TelefonoEmpresa { get; set; } = "";
 
+    public decimal PagoTuberia { get; set; }
+
   }
 }
