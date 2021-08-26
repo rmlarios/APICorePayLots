@@ -100,14 +100,14 @@ namespace Dapper.Infrastructure.Repository
       if (request.IdProyecto == "")
       {
         if (request.Desde != "" && request.Hasta != "")
-          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo >= Convert.ToDateTime(request.Desde) && m.FechaRecibo <= Convert.ToDateTime(request.Hasta) && m.FechaRecibo != null && m.EstadoPago=="Vigente");
+          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo.Value.Date >= Convert.ToDateTime(request.Desde) && m.FechaRecibo.Value.Date <= Convert.ToDateTime(request.Hasta) && m.FechaRecibo != null && m.EstadoPago=="Vigente");
         else if (request.Desde != "" && request.Hasta == "")
           result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo.Value.Date == Convert.ToDateTime(request.Desde) && m.FechaRecibo != null && m.EstadoPago=="Vigente");
       }
       else
       {
         if (request.Desde != "" && request.Hasta != "")
-          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo >= Convert.ToDateTime(request.Desde) && m.FechaRecibo <= Convert.ToDateTime(request.Hasta) && m.FechaRecibo != null && m.IdUbicacion.ToString()==request.IdProyecto && m.EstadoPago=="Vigente");
+          result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo.Value.Date >= Convert.ToDateTime(request.Desde) && m.FechaRecibo.Value.Date <= Convert.ToDateTime(request.Hasta) && m.FechaRecibo != null && m.IdUbicacion.ToString()==request.IdProyecto && m.EstadoPago=="Vigente");
         else if (request.Desde != "" && request.Hasta == "")
           result = await FindAsync<ViewPagosAsignaciones>(m => m.FechaRecibo.Value.Date == Convert.ToDateTime(request.Desde) && m.FechaRecibo != null && m.IdUbicacion.ToString()==request.IdProyecto && m.EstadoPago=="Vigente");
       }

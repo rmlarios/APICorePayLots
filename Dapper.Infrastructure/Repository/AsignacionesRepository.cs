@@ -41,6 +41,7 @@ namespace Dapper.Infrastructure.Repository
       queryParameters.Add("@AplicaMora", asignacion.AplicaMora);
       queryParameters.Add("@TasaInteres", asignacion.TasaInteres);
       queryParameters.Add("@PlazoMeses", asignacion.Plazo);
+      queryParameters.Add("@MontoTuberia", asignacion.MontoTuberia);
       queryParameters.Add("@Observaciones", asignacion.Observaciones);
       queryParameters.Add("@IdentityUser", GenerarIdentidad(user));
       queryParameters.Add("@UUA", user);
